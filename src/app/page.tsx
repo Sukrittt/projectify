@@ -3,7 +3,7 @@ import { HydrateClient } from "~/trpc/server";
 export default async function Home() {
   return (
     <HydrateClient>
-      <div>Developer Competitions</div>
+      <p className="py-16 text-center text-7xl">Developer Competitions</p>
     </HydrateClient>
   );
 }
