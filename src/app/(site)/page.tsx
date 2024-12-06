@@ -1,9 +1,11 @@
 import { HydrateClient } from "~/trpc/server";
 
-export default async function Home() {
+import { UserInfo } from "./_components/user-info";
+
+export default function Home() {
   return (
     <HydrateClient>
-      <></>
+      <UserInfo />
     </HydrateClient>
   );
 }
