@@ -63,8 +63,8 @@ export const AuthForm = () => {
   const { isLoaded: isSignUpLoaded, signUp, setActive } = useSignUp();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(!false);
-  const [step, setStep] = useState<Step>("verify-email");
+  const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState<Step>("sign-up");
 
   // react-hook-form
   const form = useForm<Inputs>({
