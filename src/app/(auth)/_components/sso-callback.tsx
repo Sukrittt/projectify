@@ -10,7 +10,11 @@ export function SSOCallback({ searchParams }: SSOCallbackPageProps) {
   const { handleRedirectCallback } = useClerk();
 
   useEffect(() => {
-    void handleRedirectCallback(searchParams);
+    const handleSSOCallback = async () => {
+      await handleRedirectCallback(searchParams);
+    };
+
+    void handleSSOCallback();
   }, [searchParams, handleRedirectCallback]);
 
   return (
@@ -18,9 +22,9 @@ export function SSOCallback({ searchParams }: SSOCallbackPageProps) {
       role="status"
       aria-label="Loading"
       aria-describedby="loading-description"
-      className="grid h-screen place-items-center"
+      className="grid h-screen w-screen place-items-center"
     >
-      <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
+      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
     </div>
   );
 }

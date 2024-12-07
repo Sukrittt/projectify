@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import { useSignUp } from "@clerk/nextjs";
+import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
@@ -28,6 +28,7 @@ import { useToast } from "~/hooks/use-toast";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useClerkError } from "~/hooks/use-clerk-error";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -53,19 +54,28 @@ const formSchema = z.object({
 });
 
 type Inputs = z.infer<typeof formSchema>;
-type Step = "sign-up" | "verify-email";
+type Step = "sign-up" | "sign-in" | "verify-email";
 
-export const AuthForm = () => {
+interface AuthFormProps {
+  type: "sign-in" | "sign-up";
+}
+
+export const AuthForm = ({ type }: AuthFormProps) => {
   const { toast } = useToast();
   const router = useRouter();
 
   const { catchClerkError } = useClerkError();
 
-  const { isLoaded: isSignUpLoaded, signUp, setActive } = useSignUp();
+  const { isLoaded, signIn, setActive: setSignInActive } = useSignIn();
+  const {
+    isLoaded: isSignUpLoaded,
+    signUp,
+    setActive: setSignUpActive,
+  } = useSignUp();
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState<Step>("sign-up");
+  const [step, setStep] = useState<Step>(type);
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -103,6 +113,29 @@ export const AuthForm = () => {
     }
   };
 
+  const handleSignIn = async (data: Inputs) => {
+    if (!isLoaded) return;
+
+    try {
+      setIsLoading(true);
+
+      const result = await signIn.create({
+        identifier: data.email,
+        password: data.password,
+      });
+
+      if (result.status === "complete") {
+        await setSignInActive({ session: result.createdSessionId });
+
+        router.push("/");
+      }
+    } catch (err) {
+      catchClerkError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const verifyEmail = async (data: Inputs) => {
     if (!isSignUpLoaded) return;
 
@@ -121,7 +154,7 @@ export const AuthForm = () => {
       });
 
       if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
+        await setSignUpActive({ session: completeSignUp.createdSessionId });
 
         router.push("/");
       }
@@ -133,9 +166,16 @@ export const AuthForm = () => {
   };
 
   function onSubmit(values: Inputs) {
-    if (step !== "sign-up") return;
-
-    void registerUser(values);
+    switch (step) {
+      case "sign-up":
+        void registerUser(values);
+        break;
+      case "sign-in":
+        void handleSignIn(values);
+        break;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {
@@ -145,120 +185,145 @@ export const AuthForm = () => {
   }, [form.watch("code")]);
 
   return (
-    <div className="space-y-4">
-      <OAuth />
+    <div className="w-full max-w-xl space-y-4 px-8 py-4">
+      <div className="space-y-4">
+        {step !== "verify-email" && (
+          <>
+            <OAuth />
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-y-3"
-        >
-          {step === "sign-up" ? (
-            <>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        placeholder="funcoder@gmail.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+          </>
+        )}
+
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-y-3"
+          >
+            {step !== "verify-email" ? (
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
                         <Input
                           disabled={isLoading}
-                          type={showPassword ? "text" : "password"}
-                          placeholder="**********"
+                          placeholder="funcoder@gmail.com"
                           {...field}
                         />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            disabled={isLoading}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="**********"
+                            {...field}
+                          />
 
-                        <div
-                          onClick={() => setShowPassword((prev) => !prev)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2"
-                        >
-                          {showPassword ? (
-                            <Eye className="h-4 w-4 cursor-pointer" />
-                          ) : (
-                            <EyeOff className="h-4 w-4 cursor-pointer" />
-                          )}
+                          <div
+                            onClick={() => setShowPassword((prev) => !prev)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2"
+                          >
+                            {showPassword ? (
+                              <Eye className="h-4 w-4 cursor-pointer" />
+                            ) : (
+                              <EyeOff className="h-4 w-4 cursor-pointer" />
+                            )}
+                          </div>
                         </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            ) : (
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem className="flex w-full flex-col items-center">
+                    <div className="space-y-4">
+                      <div>
+                        <FormLabel>Verification Code</FormLabel>
+                        <FormDescription>
+                          Enter your 6 digit code to get started.
+                        </FormDescription>
                       </div>
-                    </FormControl>
-                    <FormMessage />
+                      <FormControl>
+                        <InputOTP
+                          disabled={isLoading}
+                          pattern={REGEXP_ONLY_DIGITS}
+                          maxLength={6}
+                          {...field}
+                        >
+                          <InputOTPGroup>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                              <InputOTPSlot key={index} index={index} />
+                            ))}
+                          </InputOTPGroup>
+                        </InputOTP>
+                      </FormControl>
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
-            </>
-          ) : (
-            <FormField
-              control={form.control}
-              name="code"
-              render={({ field }) => (
-                <FormItem className="flex w-full flex-col items-center">
-                  <div className="space-y-4">
-                    <div>
-                      <FormLabel>Verification Code</FormLabel>
-                      <FormDescription>
-                        Enter your 6 digit code to get started.
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <InputOTP
-                        disabled={isLoading}
-                        pattern={REGEXP_ONLY_DIGITS}
-                        maxLength={6}
-                        {...field}
-                      >
-                        <InputOTPGroup>
-                          {Array.from({ length: 6 }).map((_, index) => (
-                            <InputOTPSlot key={index} index={index} />
-                          ))}
-                        </InputOTPGroup>
-                      </InputOTP>
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
-          )}
+            )}
 
-          {step === "sign-up" && (
-            <Button type="submit" className="mt-4 w-full" disabled={isLoading}>
-              {isLoading ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              ) : (
-                "Get Started"
-              )}
-            </Button>
-          )}
-        </form>
-      </Form>
+            {step !== "verify-email" && (
+              <Button
+                type="submit"
+                className="mt-4 w-full"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  "Continue"
+                )}
+              </Button>
+            )}
+          </form>
+        </Form>
+      </div>
+
+      {step !== "verify-email" && (
+        <p className="text-[13px] text-muted-foreground">
+          {type === "sign-in"
+            ? "Don't have an account?"
+            : "Already have an account?"}{" "}
+          <Link
+            href={type === "sign-in" ? "/sign-up" : "/sign-in"}
+            className="font-medium text-foreground"
+          >
+            <span>{type === "sign-in" ? "Create one." : "Sign in."}</span>
+          </Link>
+        </p>
+      )}
     </div>
   );
 };
