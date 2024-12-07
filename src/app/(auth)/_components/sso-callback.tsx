@@ -2,11 +2,15 @@
 
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { type HandleOAuthCallbackParams } from "@clerk/types";
+
 import { useClerk } from "@clerk/nextjs";
 
-import { type SSOCallbackPageProps } from "~/app/(auth)/sso-callback/page";
+interface SSOCallbackProps {
+  searchParams: HandleOAuthCallbackParams;
+}
 
-export function SSOCallback({ searchParams }: SSOCallbackPageProps) {
+export function SSOCallback({ searchParams }: SSOCallbackProps) {
   const { handleRedirectCallback } = useClerk();
 
   useEffect(() => {
