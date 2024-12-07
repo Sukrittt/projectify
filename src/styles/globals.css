@@ -65,3 +65,35 @@
     @apply dark bg-background text-foreground;
   }
 }
+
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* General input styling to ensure cross-browser consistency */
+input[type="number"] {
+  appearance: none;
+  margin: 0;
+}
+
+/*Change text in autofill textbox*/
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
+}
+input[data-autocompleted] {
+  background-color: transparent !important;
+  font-family: var(
+    --font-virgil
+  ) !important; /* Bug: Font applied only when screen interaction begins. */
+}
