@@ -3,6 +3,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import SuperJSON from "superjson";
+import { toast } from "~/hooks/use-toast";
 
 export const createQueryClient = () =>
   new QueryClient({
@@ -20,6 +21,16 @@ export const createQueryClient = () =>
       },
       hydrate: {
         deserializeData: SuperJSON.deserialize,
+      },
+      mutations: {
+        onError: (error) => {
+          const { message } = error;
+
+          toast({
+            title: "Oops, Something went wrong.",
+            description: message,
+          });
+        },
       },
     },
   });

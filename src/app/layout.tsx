@@ -5,7 +5,7 @@ import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { Toaster } from "~/components/ui/toaster";
+import Providers from "~/app/_components/providers";
 
 export const metadata: Metadata = {
   title: "Developer Competitions",
@@ -25,8 +25,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${font.variable}`}>
         <body className="font-virgil">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
-          <Toaster />
+          <TRPCReactProvider>
+            <Providers>{children}</Providers>
+          </TRPCReactProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -1,11 +1,12 @@
 "use client";
 
 import { z } from "zod";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -28,7 +29,6 @@ import { useToast } from "~/hooks/use-toast";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useClerkError } from "~/hooks/use-clerk-error";
-import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -156,7 +156,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
       if (completeSignUp.status === "complete") {
         await setSignUpActive({ session: completeSignUp.createdSessionId });
 
-        router.push("/");
+        router.push("/onboarding");
       }
     } catch (err) {
       catchClerkError(err);

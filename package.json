@@ -18,6 +18,8 @@
   "dependencies": {
     "@clerk/nextjs": "^6.5.1",
     "@clerk/types": "^4.39.0",
+    "@dicebear/collection": "^9.2.2",
+    "@dicebear/core": "^9.2.2",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
