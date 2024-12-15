@@ -26,8 +26,15 @@ export const withOnboarding = <P extends object>(
 
         if (!response.data) return;
 
-        //Not yet onboarded
-        if (!response.data.status) redirect("/onboarding");
+        const onboardingStatus = response.data.status;
+
+        if (pathname !== "/onboarding") {
+          // Not yet onboarded
+          if (!onboardingStatus) redirect("/onboarding");
+        } else {
+          // Already onboarded
+          if (onboardingStatus) redirect("/");
+        }
       };
 
       void handleOnboardingRedirection();

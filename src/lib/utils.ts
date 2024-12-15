@@ -10,6 +10,8 @@ export const handleAxiosError = (error: any) => {
   if (axios.isAxiosError(error)) {
     const { response } = error;
 
+    console.log("response", response);
+
     return {
       ok: false,
       message:
