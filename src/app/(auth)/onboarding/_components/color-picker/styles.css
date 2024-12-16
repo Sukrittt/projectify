@@ -1,0 +1,7 @@
+label {
+  color: white !important;
+}
+
+input {
+  @apply rounded-md bg-transparent text-center;
+}

@@ -43,7 +43,7 @@ export const Avatar = () => {
 
   useEffect(() => {
     const packageConfig = genConfig({
-      isGradient: Boolean(Math.round(Math.random())),
+      isGradient: true,
     });
 
     setConfig(packageConfig);
