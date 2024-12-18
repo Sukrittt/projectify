@@ -1,8 +1,10 @@
+import { useAtom } from "jotai";
 import { useEffect } from "react";
 import { redirect, usePathname } from "next/navigation";
 
 import { toast } from "~/hooks/use-toast";
 import { publicRoutes } from "~/constants";
+import { onboardingStatusAtom } from "~/atom";
 import { getOnboardingStatus } from "~/app/_actions/user";
 
 export const withOnboarding = <P extends object>(
@@ -10,11 +12,18 @@ export const withOnboarding = <P extends object>(
 ) => {
   return function WithOnboarding(props: P) {
     const pathname = usePathname();
+    const [onboardingStatus, setOnboardingStatus] =
+      useAtom(onboardingStatusAtom);
 
     useEffect(() => {
       if (publicRoutes.includes(pathname)) return;
 
       const handleOnboardingRedirection = async () => {
+        if (onboardingStatus !== undefined) {
+          if (!onboardingStatus) redirect("/onboarding");
+          else redirect("/");
+        }
+
         const response = await getOnboardingStatus();
 
         if (!response.ok) {
@@ -24,22 +33,31 @@ export const withOnboarding = <P extends object>(
           });
         }
 
-        if (!response.data) return;
+        if (response.data === undefined) return;
 
-        const onboardingStatus = response.data.status;
+        const onboardingStatusRes = response.data;
+        setOnboardingStatus(onboardingStatusRes);
 
         if (pathname !== "/onboarding") {
           // Not yet onboarded
-          if (!onboardingStatus) redirect("/onboarding");
+          if (!onboardingStatusRes) redirect("/onboarding");
         } else {
           // Already onboarded
-          if (onboardingStatus) redirect("/");
+          if (onboardingStatusRes) redirect("/");
         }
       };
 
       void handleOnboardingRedirection();
-    }, [pathname]);
+    }, [pathname, setOnboardingStatus]);
 
-    return <WrappedComponent {...props} />;
+    return (
+      <>
+        {onboardingStatus === undefined ? (
+          <div className="grid h-screen place-items-center">Loading...</div>
+        ) : (
+          <WrappedComponent {...props} />
+        )}
+      </>
+    );
   };
 };

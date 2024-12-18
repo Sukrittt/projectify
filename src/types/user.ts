@@ -1,1 +1,1 @@
-export type OnboardingStatus = { status: boolean };
+export type OnboardingStatus = { data: { status: boolean }; message: string };

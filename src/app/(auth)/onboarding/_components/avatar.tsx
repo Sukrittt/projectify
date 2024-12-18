@@ -13,10 +13,6 @@ import { AvatarCustomizer } from "./avatar-customizer";
 export const Avatar = () => {
   const [config, setConfig] = useAtom(avatarConfigAtom);
 
-  // const selectConfig = (config: Required<AvatarFullConfig>) => {
-  //   setConfig(config);
-  // };
-
   const updateConfig = (key: string, value: any) => {
     if (!config) return;
 
@@ -35,6 +31,7 @@ export const Avatar = () => {
       ...defaultOptions.hairStyleMan,
       ...defaultOptions.hairStyleWoman,
     ]);
+
     return {
       ...defaultOptions,
       hairStyle: Array.from(hairSet),

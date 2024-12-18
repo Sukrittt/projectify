@@ -13,6 +13,7 @@ import Nose from "./avatar-config/nose";
 import { colorPickerAtom } from "~/atom";
 import Shirt from "./avatar-config/shirt";
 import Mouth from "./avatar-config/mouth";
+import { SaveConfig } from "./save-config";
 import { ColorPicker } from "./color-picker";
 import Glasses from "./avatar-config/glasses";
 import { Dock, DockIcon } from "~/components/ui/dock";
@@ -27,7 +28,7 @@ export const AvatarCustomizer = ({ config, updateConfig }: AvatarCustomize) => {
   if (!config) return null;
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center gap-x-4">
       <Dock magnification={60} distance={100}>
         <DockIcon>
           <CustomToolTip text="Face">
@@ -121,6 +122,8 @@ export const AvatarCustomizer = ({ config, updateConfig }: AvatarCustomize) => {
           </CustomToolTip>
         </DockIcon>
       </Dock>
+
+      <SaveConfig config={config} />
     </div>
   );
 };

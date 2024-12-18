@@ -7,7 +7,7 @@ import { handleAxiosError } from "~/lib/utils";
 import type { ServerActionResponse, OnboardingStatus } from "~/types";
 
 export const getOnboardingStatus = async (): Promise<
-  ServerActionResponse<OnboardingStatus>
+  ServerActionResponse<boolean>
 > => {
   try {
     const user = await currentUser();
@@ -23,12 +23,12 @@ export const getOnboardingStatus = async (): Promise<
       `/users/${user.id}/getOnboardingStatus`,
     );
 
-    const data = response.data as OnboardingStatus;
+    const { data, message } = response.data as OnboardingStatus;
 
     return {
       ok: true,
-      data,
-      message: "Successfully fetched onboarding status",
+      data: data.status,
+      message: message,
     };
   } catch (error: any) {
     return handleAxiosError(error);
