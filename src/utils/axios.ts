@@ -11,8 +11,7 @@ const envSchema = z.object({
 const env = envSchema.parse(process.env);
 
 const apiClient = axios.create({
-  // baseURL: env.MICROSERVICE_PRODUCTION_URL,
-  baseURL: env.MICROSERVICE_DEVELOPMENT_URL,
+  baseURL: env.MICROSERVICE_PRODUCTION_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
