@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import apiClient from "~/utils/axios";
 import { handleAxiosError } from "~/lib/utils";
-import type { ServerActionResponse, OnboardingStatus } from "~/types";
+import type { ServerActionResponse, UserAvatar } from "~/types";
 
 export const getOnboardingStatus = async (): Promise<
   ServerActionResponse<boolean>
@@ -20,15 +20,15 @@ export const getOnboardingStatus = async (): Promise<
     }
 
     const response = await apiClient.get(
-      `/users/${user.id}/getOnboardingStatus`,
+      `/users/${user.id}?attributes=avatarConfig`,
     );
 
-    const { data, message } = response.data as OnboardingStatus;
+    const { data, message } = response.data as UserAvatar;
 
     return {
       ok: true,
-      data: data.status,
-      message: message,
+      data: !!data.avatarConfig,
+      message,
     };
   } catch (error: any) {
     return handleAxiosError(error);

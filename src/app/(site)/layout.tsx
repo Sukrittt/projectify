@@ -1,20 +1,12 @@
-import Link from "next/link";
-
-import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
+import { Sidebar } from "./_components/sidebar";
 
 export default function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex flex-col gap-y-2 p-4">
-      <div className="flex justify-end">
-        <Link href="/sign-in" className={cn(buttonVariants(), "w-fit")}>
-          Get Started
-        </Link>
-      </div>
-
-      {children}
+    <div className="flex h-screen gap-x-2 p-4">
+      <Sidebar />
+      <div className="h-full grow">{children}</div>
     </div>
   );
 }

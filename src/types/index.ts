@@ -1,4 +1,4 @@
-export { type OnboardingStatus } from "./user";
+export type { UserAvatar, UserInfo } from "./user";
 
 export type {
   Sex,
