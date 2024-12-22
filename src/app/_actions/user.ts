@@ -15,7 +15,7 @@ export const getOnboardingStatus = async (): Promise<
     if (!user) {
       return {
         ok: false,
-        message: "No user was found.",
+        message: "We couldn't find your account.",
       };
     }
 

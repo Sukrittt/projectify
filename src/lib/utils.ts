@@ -1,4 +1,3 @@
-import axios from "axios";
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
 
@@ -7,20 +6,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const handleAxiosError = (error: any) => {
-  if (axios.isAxiosError(error)) {
-    const { response } = error;
-
-    console.log("response", response);
-
-    return {
-      ok: false,
-      message:
-        response?.data?.message ?? "Something went wrong. Try again later.",
-    };
-  }
+  const { response } = error;
 
   return {
     ok: false,
-    message: "Something went wrong. Try again later.",
+    message:
+      response?.data?.message ?? "Something went wrong. Try again later.",
   };
 };

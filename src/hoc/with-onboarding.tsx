@@ -16,7 +16,10 @@ export const withOnboarding = <P extends object>(
       useAtom(onboardingStatusAtom);
 
     useEffect(() => {
-      if (publicRoutes.includes(pathname)) return;
+      if (publicRoutes.includes(pathname)) {
+        setOnboardingStatus(false);
+        return;
+      }
 
       const handleOnboardingRedirection = async () => {
         if (onboardingStatus !== undefined) {
@@ -33,7 +36,11 @@ export const withOnboarding = <P extends object>(
           });
         }
 
-        if (response.data === undefined) return;
+        if (response.data === undefined) {
+          setOnboardingStatus(false);
+          redirect("/sign-in");
+          return;
+        }
 
         const onboardingStatusRes = response.data;
         setOnboardingStatus(onboardingStatusRes);
