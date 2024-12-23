@@ -12,16 +12,22 @@ export const UserProfile = () => {
       {isLoading ? (
         <p>Loading...</p>
       ) : serverData ? (
-        <div className="flex items-start gap-x-4">
+        <div className="flex justify-end gap-x-4">
           <div id={"onboarding-avatar"}>
             <ReactNiceAvatar
               {...serverData.data.avatarConfig}
-              className="h-10 w-10"
-              shape="circle"
+              className="h-12 w-12"
             />
           </div>
 
-          <p>{serverData.data.firstName + serverData.data.lastName}</p>
+          <div className="flex flex-col">
+            <p className="text-lg">
+              {serverData.data.firstName + " " + serverData.data.lastName}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Level <span className="text-foreground">#1</span>
+            </p>
+          </div>
         </div>
       ) : (
         <p>No config</p>

@@ -4,6 +4,7 @@ import { redirect, usePathname } from "next/navigation";
 
 import { publicRoutes } from "~/constants";
 import { onboardingStatusAtom } from "~/atom";
+import { useMounted } from "~/hooks/use-mounted";
 import { getOnboardingStatus } from "~/app/_actions/user";
 
 export const withOnboarding = <P extends object>(
@@ -14,9 +15,10 @@ export const withOnboarding = <P extends object>(
     const [onboardingStatus, setOnboardingStatus] =
       useAtom(onboardingStatusAtom);
 
+    const mounted = useMounted();
+
     useEffect(() => {
-      if (publicRoutes.includes(pathname)) {
-        setOnboardingStatus(false);
+      if (publicRoutes.includes(pathname) || !mounted) {
         return;
       }
 
@@ -34,6 +36,7 @@ export const withOnboarding = <P extends object>(
         }
 
         const onboardingStatusRes = response.data;
+
         setOnboardingStatus(onboardingStatusRes);
 
         if (pathname !== "/onboarding") {
@@ -46,11 +49,11 @@ export const withOnboarding = <P extends object>(
       };
 
       void handleOnboardingRedirection();
-    }, [pathname, setOnboardingStatus]);
+    }, [pathname, mounted, setOnboardingStatus]);
 
     return (
       <>
-        {onboardingStatus === undefined && false ? (
+        {!mounted ? (
           <div className="grid h-screen place-items-center">Loading...</div>
         ) : (
           <WrappedComponent {...props} />
