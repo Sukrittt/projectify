@@ -6,6 +6,7 @@ import { publicRoutes } from "~/constants";
 import { onboardingStatusAtom } from "~/atom";
 import { useMounted } from "~/hooks/use-mounted";
 import { getOnboardingStatus } from "~/app/_actions/user";
+import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 
 export const withOnboarding = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
@@ -54,7 +55,12 @@ export const withOnboarding = <P extends object>(
     return (
       <>
         {!mounted ? (
-          <div className="grid h-screen place-items-center">Loading...</div>
+          <div className="grid h-screen place-items-center">
+            <div className="flex gap-x-[3px]">
+              Loading
+              <LoaderDot />
+            </div>
+          </div>
         ) : (
           <WrappedComponent {...props} />
         )}

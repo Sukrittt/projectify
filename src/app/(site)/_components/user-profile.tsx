@@ -3,6 +3,7 @@
 import ReactNiceAvatar from "react-nice-avatar";
 
 import { useUserInfo } from "~/app/(site)/_hooks/useUserInfo";
+import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 
 export const UserProfile = () => {
   const { data: serverData, isLoading } = useUserInfo();
@@ -10,9 +11,12 @@ export const UserProfile = () => {
   return (
     <div>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className="flex gap-x-[3px]">
+          Loading
+          <LoaderDot />
+        </div>
       ) : serverData ? (
-        <div className="flex justify-end gap-x-4">
+        <div className="flex justify-end gap-x-4 pr-10">
           <div id={"onboarding-avatar"}>
             <ReactNiceAvatar
               {...serverData.data.avatarConfig}

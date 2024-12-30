@@ -19,3 +19,5 @@ export type ServerActionResponse<T> = {
   data?: T;
   message: string;
 };
+
+export type { RoomData } from "./room";

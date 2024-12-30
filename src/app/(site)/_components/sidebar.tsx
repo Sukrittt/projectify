@@ -4,7 +4,6 @@ import {
   Home,
   Key,
   Lightbulb,
-  Loader2,
   LogOut,
   MessageCircle,
   Newspaper,
@@ -19,6 +18,7 @@ import { redirect, usePathname } from "next/navigation";
 
 import { cn } from "~/lib/utils";
 import { toast } from "~/hooks/use-toast";
+import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { CustomToolTip } from "~/components/ui/custom-tool-tip";
 
 export const Sidebar = () => {
@@ -120,7 +120,7 @@ const ManageUser = () => {
     >
       <CustomToolTip text={loading ? "Loading" : user ? "Logout" : "Sign in"}>
         {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <LoaderDot className="pb-0" />
         ) : user ? (
           <LogOut className="h-4 w-4" />
         ) : (

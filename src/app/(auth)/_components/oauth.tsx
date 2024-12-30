@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useSignIn } from "@clerk/nextjs";
+import { type LucideProps } from "lucide-react";
 import { type OAuthStrategy } from "@clerk/types";
-import { Loader2, type LucideProps } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import { useClerkError } from "~/hooks/use-clerk-error";
+import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 
 type OAuthProvider = {
   name: string;
@@ -55,9 +56,10 @@ export const OAuth = () => {
             disabled={isLoading === provider.strategy}
             onClick={() => handleOAuthLogin(provider.strategy)}
             className="gap-x-1"
+            disableLoader
           >
             {isLoading === provider.strategy ? (
-              <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+              <LoaderDot />
             ) : (
               <Icon className="mr-2 h-3.5 w-3.5" />
             )}

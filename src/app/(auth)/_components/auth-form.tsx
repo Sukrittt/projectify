@@ -3,9 +3,9 @@
 import { z } from "zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -300,11 +300,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
                 className="mt-4 w-full"
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  "Continue"
-                )}
+                Continue
               </Button>
             )}
           </form>

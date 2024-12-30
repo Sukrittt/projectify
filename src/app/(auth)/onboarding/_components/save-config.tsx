@@ -1,8 +1,9 @@
-import { Check, Loader2 } from "lucide-react";
+import { Check } from "lucide-react";
 import { type AvatarFullConfig } from "react-nice-avatar";
 
 import { cn } from "~/lib/utils";
 import { Dock, DockIcon } from "~/components/ui/dock";
+import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { CustomToolTip } from "~/components/ui/custom-tool-tip";
 import { useUpdateUser } from "~/app/(auth)/onboarding/_hooks/useUpdateUser";
 
@@ -30,11 +31,7 @@ export const SaveConfig: React.FC<SaveConfigProps> = ({ config }) => {
               },
             )}
           >
-            {isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Check className="h-4 w-4" />
-            )}
+            {isPending ? <LoaderDot /> : <Check className="h-4 w-4" />}
           </div>
         </CustomToolTip>
       </DockIcon>
