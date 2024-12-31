@@ -31,7 +31,11 @@ export const SaveConfig: React.FC<SaveConfigProps> = ({ config }) => {
               },
             )}
           >
-            {isPending ? <LoaderDot /> : <Check className="h-4 w-4" />}
+            {isPending ? (
+              <LoaderDot className="pt-[7px]" />
+            ) : (
+              <Check className="h-4 w-4" />
+            )}
           </div>
         </CustomToolTip>
       </DockIcon>

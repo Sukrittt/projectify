@@ -20,13 +20,16 @@ export const withOnboarding = <P extends object>(
 
     useEffect(() => {
       if (publicRoutes.includes(pathname) || !mounted) {
+        setOnboardingStatus(false);
         return;
       }
 
       const handleOnboardingRedirection = async () => {
         if (onboardingStatus !== undefined) {
           if (!onboardingStatus) redirect("/onboarding");
-          else redirect("/");
+          else if (pathname === "/onboarding") redirect("/");
+
+          return;
         }
 
         const response = await getOnboardingStatus();
@@ -54,7 +57,7 @@ export const withOnboarding = <P extends object>(
 
     return (
       <>
-        {!mounted ? (
+        {!mounted || onboardingStatus === undefined ? (
           <div className="grid h-screen place-items-center">
             <div className="flex gap-x-[3px]">
               Loading
