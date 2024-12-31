@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { ChartSpline, CircleHelp, Gamepad, Lightbulb } from "lucide-react";
 
 import { cn } from "~/lib/utils";
+import type { InteractionValues } from "~/types";
+import { activityOpts } from "~/app/(screen)/room/_constant";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
-import type { InteractionValues, InteractionData } from "~/types";
 
 interface WaitingRoomInteractionProps {
   handleActivityClick: (values: string[], value: string) => void;
@@ -12,29 +12,6 @@ interface WaitingRoomInteractionProps {
 export const WaitingRoomInteraction: React.FC<WaitingRoomInteractionProps> = ({
   handleActivityClick,
 }) => {
-  const options: InteractionData = [
-    {
-      label: "Coding Minigames",
-      value: "coding-minigames",
-      icon: <Gamepad className="h-6 w-6" />,
-    },
-    {
-      label: "Tips and Tricks Showcase",
-      value: "tips-and-tricks",
-      icon: <Lightbulb className="h-6 w-6" />,
-    },
-    {
-      label: "Trivia Questions",
-      value: "trivia",
-      icon: <CircleHelp className="h-6 w-6" />,
-    },
-    {
-      label: "Progress Insights",
-      value: "progress-insights",
-      icon: <ChartSpline className="h-6 w-6" />,
-    },
-  ];
-
   const [loading, setLoading] = useState<InteractionValues | null>(null);
 
   const handleLoadPromise = async (value: InteractionValues) => {
@@ -55,15 +32,15 @@ export const WaitingRoomInteraction: React.FC<WaitingRoomInteractionProps> = ({
       </p>
 
       <div className="flex items-center gap-x-2">
-        {options.map((option, index) => (
+        {activityOpts.map((option, index) => (
           <div
             key={index}
             onClick={async () => {
               handleActivityClick(
-                options
+                activityOpts
                   .filter((opt) => opt.value !== option.value)
                   .map((opt) => `.room-interaction-${opt.value}`),
-                `.room-interaction-${option.value}`,
+                option.value,
               );
               await handleLoadPromise(option.value);
             }}

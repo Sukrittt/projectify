@@ -3,12 +3,13 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useEffect, useRef, useState } from "react";
 
-import type { RoomData } from "~/types";
+import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+import type { InteractionData, RoomData } from "~/types";
+import { activityOpts } from "~/app/(screen)/room/_constant";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { WaitingRoomInteraction } from "./waiting-room-interaction";
 import { useEstimatedQueueTime } from "~/app/(screen)/room/_hooks/useEstimatedQueueTime";
-
 interface RoomContainerProps {
   room: RoomData;
 }
@@ -17,11 +18,23 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
+  const [isClosing, setIsClosing] = useState(false);
+
+  const [activity, setActivity] = useState<InteractionData[number] | null>(
+    null,
+  );
+
   const { contextSafe } = useGSAP({
     scope: container,
   });
 
   const handleActivityClick = contextSafe((values: string[], value: string) => {
+    const currentActivity =
+      activityOpts.find((opt) => opt.value === value) ?? null;
+
+    setActivity(currentActivity);
+    setIsClosing(false);
+
     tl.current = gsap
       .timeline()
       .to(".room-controls", {
@@ -47,17 +60,121 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
         "-=0.5",
       )
       .to(
-        value,
+        `.room-interaction-${value}`,
         {
           opacity: 0,
           ease: "power4.out",
         },
         "-=0.25",
+      )
+      .to(".room-activity-container", {
+        y: 0,
+        ease: "power4.out",
+        duration: 0.1,
+      })
+      .fromTo(
+        ".activity-content",
+        {
+          opacity: 0,
+          stagger: 0.1,
+          ease: "power4.out",
+        },
+        {
+          opacity: 1,
+          stagger: 0.1,
+          ease: "power4.out",
+        },
+      );
+  });
+
+  const handleActivityClose = contextSafe(() => {
+    setActivity(null);
+    setIsClosing(true);
+
+    tl.current = gsap
+      .timeline()
+      .to(".activity-content", {
+        opacity: 0,
+        stagger: 0.1,
+        ease: "power4.out",
+      })
+      .to(".room-activity-container", {
+        y: "-100%",
+        ease: "power4.out",
+        duration: 0.1,
+      })
+      .to(".room-controls", {
+        opacity: 1,
+        ease: "power4.in",
+      })
+      .to(
+        ".room-interaction-text",
+        {
+          opacity: 1,
+          ease: "power4.in",
+        },
+        "-=0.5",
+      )
+      .to(
+        activityOpts.map((opt) => `.room-interaction-${opt.value}`),
+        {
+          opacity: 1,
+          ease: "power4.out",
+          stagger: 0.1,
+          reversed: true,
+        },
+        "-=0.5",
       );
   });
 
   return (
     <div ref={container}>
+      <div className="room-activity-container absolute z-[9999] h-screen w-full -translate-y-[100%] bg-background">
+        <div className="relative flex h-full flex-col gap-y-4 p-8">
+          <Button
+            variant="secondary"
+            onClick={handleActivityClose}
+            disabled={isClosing}
+            className="activity-content absolute bottom-8 right-8 gap-x-[3px]"
+          >
+            {isClosing ? "Closing" : "Close"}
+          </Button>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-x-4">
+              <div className="activity-content">
+                {activity?.icon ?? <LoaderDot />}
+              </div>
+              <p className="activity-content">{activity?.label}</p>
+
+              <span className="activity-content">|</span>
+
+              <TimeTracker
+                createdAt={room.data.createdAt}
+                className="activity-content text-muted-foreground"
+              />
+            </div>
+
+            <div className="flex items-center gap-x-4">
+              <Button variant="secondary" className="activity-content w-full">
+                Cancel
+              </Button>
+
+              <Button
+                className="activity-content gap-x-[3px]"
+                disabled
+                dotClassName="bg-black"
+              >
+                Searching
+              </Button>
+            </div>
+          </div>
+
+          {/* Activity Content */}
+          <p className="activity-content text-sm">{activity?.label} content</p>
+        </div>
+      </div>
+
       <div className="grid h-screen place-items-center">
         <div className="flex w-full max-w-2xl flex-col items-center gap-y-8">
           <div className="room-controls flex w-full flex-col gap-y-4">
@@ -112,9 +229,10 @@ const EstimatedQueueTime = () => {
 
 interface TimerTrackerProps {
   createdAt: Date;
+  className?: string;
 }
 
-const TimeTracker: React.FC<TimerTrackerProps> = ({ createdAt }) => {
+const TimeTracker: React.FC<TimerTrackerProps> = ({ createdAt, className }) => {
   const [time, setTime] = useState(() =>
     Math.floor((Date.now() - new Date(createdAt).getTime()) / 1000),
   );
@@ -135,5 +253,5 @@ const TimeTracker: React.FC<TimerTrackerProps> = ({ createdAt }) => {
     return `${mins}:${secs}`;
   };
 
-  return <p className="text-sm">{formatTime(time)}</p>;
+  return <p className={cn("text-sm", className)}>{formatTime(time)}</p>;
 };
