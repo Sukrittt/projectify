@@ -20,4 +20,4 @@ export type ServerActionResponse<T> = {
   message: string;
 };
 
-export type { RoomData } from "./room";
+export type { RoomData, InteractionData, InteractionValues } from "./room";

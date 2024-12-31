@@ -1,10 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
-import { ChartSpline, CircleHelp, Gamepad, Lightbulb } from "lucide-react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useEffect, useRef, useState } from "react";
 
 import type { RoomData } from "~/types";
 import { Button } from "~/components/ui/button";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
+import { WaitingRoomInteraction } from "./waiting-room-interaction";
 import { useEstimatedQueueTime } from "~/app/(screen)/room/_hooks/useEstimatedQueueTime";
 
 interface RoomContainerProps {
@@ -12,62 +14,73 @@ interface RoomContainerProps {
 }
 
 export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
+  const container = useRef<HTMLDivElement | null>(null);
+  const tl = useRef<gsap.core.Timeline | null>(null);
+
+  const { contextSafe } = useGSAP({
+    scope: container,
+  });
+
+  const handleActivityClick = contextSafe((values: string[], value: string) => {
+    tl.current = gsap
+      .timeline()
+      .to(".room-controls", {
+        opacity: 0,
+        ease: "power4.in",
+      })
+      .to(
+        ".room-interaction-text",
+        {
+          opacity: 0,
+          ease: "power4.in",
+        },
+        "-=0.5",
+      )
+      .to(
+        values,
+        {
+          opacity: 0,
+          ease: "power4.out",
+          stagger: 0.1,
+          reversed: true,
+        },
+        "-=0.5",
+      )
+      .to(
+        value,
+        {
+          opacity: 0,
+          ease: "power4.out",
+        },
+        "-=0.25",
+      );
+  });
+
   return (
-    <div className="grid h-screen place-items-center">
-      <div className="flex w-full max-w-2xl flex-col items-center gap-y-4">
-        <div className="flex w-full items-center justify-between">
-          <TimeTracker createdAt={room.data.createdAt} />
-          <EstimatedQueueTime />
-        </div>
+    <div ref={container}>
+      <div className="grid h-screen place-items-center">
+        <div className="flex w-full max-w-2xl flex-col items-center gap-y-8">
+          <div className="room-controls flex w-full flex-col gap-y-4">
+            <div className="flex w-full items-center justify-between">
+              <TimeTracker createdAt={room.data.createdAt} />
+              <EstimatedQueueTime />
+            </div>
 
-        <Button className="w-full gap-x-[3px]" disabled dotClassName="bg-black">
-          Searching
-        </Button>
+            <Button
+              className="w-full gap-x-[3px]"
+              disabled
+              dotClassName="bg-black"
+            >
+              Searching
+            </Button>
 
-        <Button variant="secondary" className="w-full">
-          Cancel
-        </Button>
-
-        <WaitingRoomInteractionOpts />
-      </div>
-    </div>
-  );
-};
-
-const WaitingRoomInteractionOpts = () => {
-  const options = [
-    {
-      label: "Coding Minigames",
-      icon: <Gamepad className="h-6 w-6" />,
-    },
-    {
-      label: "Tips and Tricks Showcase",
-      icon: <Lightbulb className="h-6 w-6" />,
-    },
-    {
-      label: "Trivia Questions",
-      icon: <CircleHelp className="h-6 w-6" />,
-    },
-    {
-      label: "Progress Insights",
-      icon: <ChartSpline className="h-6 w-6" />,
-    },
-  ];
-
-  return (
-    <div className="flex flex-col items-center gap-y-4 pt-4">
-      <p className="uppercase text-muted-foreground">While you wait</p>
-
-      <div className="flex items-center gap-x-2">
-        {options.map((option, index) => (
-          <div
-            key={index}
-            className="flex w-[250px] cursor-pointer flex-col items-center justify-center gap-y-2 rounded-xl border px-4 py-8 transition hover:border-neutral-500"
-          >
-            {option.icon}
-            <p className="text-sm text-muted-foreground">{option.label}</p>
+            <Button variant="secondary" className="w-full">
+              Cancel
+            </Button>
           </div>
-        ))}
+
+          <WaitingRoomInteraction handleActivityClick={handleActivityClick} />
+        </div>
       </div>
     </div>
   );
@@ -82,7 +95,7 @@ const EstimatedQueueTime = () => {
         <div className="flex items-center gap-x-2">
           <p>Estimated Queue Time</p>
           <div className="flex h-6 w-fit items-center justify-center rounded-lg bg-slate-800 px-2">
-            {serverData.data?.toFixed(0) ?? 0} s
+            {serverData.data?.toFixed(0) ?? 0}s
           </div>
         </div>
       ) : (
