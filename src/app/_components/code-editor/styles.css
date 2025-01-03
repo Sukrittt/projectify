@@ -1,0 +1,13 @@
+.monaco-editor {
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+div[role="presentation"] {
+  padding-right: 20px;
+}
+
+.line-numbers {
+  width: 30px !important;
+}

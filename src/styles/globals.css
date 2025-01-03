@@ -97,3 +97,7 @@ input[data-autocompleted] {
     --font-virgil
   ) !important; /* Bug: Font applied only when screen interaction begins. */
 }
+
+svg[aria-label="Codeium Logo"] {
+  display: none;
+}

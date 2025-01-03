@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+import { CodingMiniGame } from "./coding-minigame";
 import type { InteractionData, RoomData } from "~/types";
 import { activityOpts } from "~/app/(screen)/room/_constant";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
@@ -171,7 +172,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
           </div>
 
           {/* Activity Content */}
-          <p className="activity-content text-sm">{activity?.label} content</p>
+          {activity?.value === "coding-minigames" && <CodingMiniGame />}
         </div>
       </div>
 

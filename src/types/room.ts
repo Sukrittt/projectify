@@ -17,3 +17,21 @@ export type InteractionData = Array<{
   value: InteractionValues;
   icon: React.ReactNode;
 }>;
+
+export type CodingMinigamePayload = {
+  previousQuestions: PreviousQuestion[];
+  tiers: Tier[];
+  user: {
+    name: string;
+    language: string;
+    profileRank: number;
+    tierLevel: string;
+  };
+};
+
+type Tier = { name: string; description: string; tierRange: string };
+
+type PreviousQuestion = {
+  question: string;
+  questionType: string;
+};

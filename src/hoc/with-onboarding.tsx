@@ -19,7 +19,7 @@ export const withOnboarding = <P extends object>(
     const mounted = useMounted();
 
     useEffect(() => {
-      if (publicRoutes.includes(pathname) || !mounted) {
+      if (publicRoutes.includes(pathname)) {
         setOnboardingStatus(false);
         return;
       }
