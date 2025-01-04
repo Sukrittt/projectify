@@ -16,7 +16,7 @@ export const useMiniGameQuestion = (
 
   const { mutate: generateMinigame, isPending } = useMutation({
     mutationFn: async () => {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/ai/generate", {
         method: "POST",
         body: JSON.stringify({ previousQuestions }),
       });

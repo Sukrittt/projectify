@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 
 import { CodeEditor } from "~/app/_components/code-editor";
 import { useMiniGameQuestion } from "~/app/(screen)/room/_hooks/useMiniGameQuestion";
+import { EvaluateMinigame } from "./evaluate-minigame";
 
 export const CodingMiniGame = () => {
   const [codeBlock, setCodeBlock] = useState("");
@@ -21,17 +22,23 @@ export const CodingMiniGame = () => {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-4 pt-4">
-      <div className="activity-content rounded-xl bg-[#1e1e1e] p-4">
+      <div className="rounded-xl bg-[#1e1e1e] p-4">
         <Markdown className="leading-8">{`Q. ${question}`}</Markdown>
       </div>
 
-      <div className="code-editor activity-content grow">
+      <div className="code-editor grow">
         <CodeEditor
           code={codeBlock}
           setCode={setCodeBlock}
           language={language}
         />
       </div>
+
+      <EvaluateMinigame
+        question={question}
+        code={codeBlock}
+        handleSuccess={() => generateMinigame()}
+      />
     </div>
   );
 };

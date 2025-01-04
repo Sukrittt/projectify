@@ -137,7 +137,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
             variant="secondary"
             onClick={handleActivityClose}
             disabled={isClosing}
-            className="activity-content absolute bottom-8 right-8 gap-x-[3px]"
+            className="activity-content absolute bottom-8 left-8 gap-x-[3px]"
           >
             {isClosing ? "Closing" : "Close"}
           </Button>
@@ -173,7 +173,9 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
           </div>
 
           {/* Activity Content */}
-          {activity?.value === "coding-minigames" && <CodingMiniGame />}
+          <div className="activity-content h-full">
+            {activity?.value === "coding-minigames" && <CodingMiniGame />}
+          </div>
         </div>
       </div>
 
