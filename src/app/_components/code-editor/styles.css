@@ -1,13 +1,16 @@
 .monaco-editor {
   border-radius: 12px;
-  overflow: hidden;
   padding: 10px 0;
 }
 
-div[role="presentation"] {
-  padding-right: 20px;
+.overflow-guard {
+  border-radius: 12px;
 }
-
 .line-numbers {
   width: 30px !important;
+}
+
+.code-editor > div,
+.code-editor > div > section {
+  height: 92.5% !important;
 }

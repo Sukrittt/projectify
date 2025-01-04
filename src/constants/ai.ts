@@ -71,11 +71,13 @@ export const personality = {
         Additional Instructions:
           - Keep questions concise, clear, and creative. Ensure questions encourage learning and progress without being overly complex.
           - Pick any one of the above question types and provide a question that is tailored to the user's tier level, profile rank, and language preference. Do not provide any other question types.
-          - If the question includes a code block (a part of the question), wrap it with ^^^^.
+          - Write the question first, followed by the code block, separated by a line break.
+          - If the question includes a code block (a part of the question), wrap it with exactly four caret symbols (^). Example: ^^^^.
           - Do not include any user information or references in the question, such as tier level, language, or user-specific examples.
           - Only provide the question. Do not include introductory or explanatory text about the user's skill level or any other context.
           - Avoid using quotation marks around the question.
           - Use appropriate line breaks (e.g., \n) for formatting, especially for code blocks.
+          - At the end of the response, include the language (in lowercase) of the code block, wrapped with $$$$.
 
           You should respond only with the question to be presented to the user, in the specified format, without adding any extra information.
 

@@ -8,6 +8,7 @@ export const useMiniGameQuestion = (
   setCodeBlock: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   const [question, setQuestion] = useState("");
+  const [language, setLanguage] = useState("");
 
   const [previousQuestions, setPreviousQuestions] = useState<
     PromptValidatorType["previousQuestions"]
@@ -48,6 +49,7 @@ export const useMiniGameQuestion = (
 
           setQuestion(extractQuestion(accResponse));
           setCodeBlock(extractBoilerPlate(accResponse) ?? "");
+          setLanguage(extractLanguage(accResponse) ?? "");
         }
 
         setPreviousQuestions((prev) => [...prev, { question: accResponse }]);
@@ -60,7 +62,7 @@ export const useMiniGameQuestion = (
     },
   });
 
-  return { generateMinigame, isPending, question };
+  return { generateMinigame, isPending, question, language };
 };
 
 function extractBoilerPlate(input: string | null | undefined) {
@@ -68,6 +70,11 @@ function extractBoilerPlate(input: string | null | undefined) {
   return match ? match[1]?.trim() : null;
 }
 
-function extractQuestion(input: string) {
-  return input.replace(/\^\^\^\^.*?\^\^\^\^/s, "").trim();
+function extractQuestion(input: string): string {
+  return input.replace(/\^\^\^\^.*$/s, "").trim();
+}
+
+function extractLanguage(input: string | null | undefined) {
+  const match = input?.match(/\$\$\$\$(.*?)\$\$\$\$/s);
+  return match ? match[1]?.trim() : null;
 }

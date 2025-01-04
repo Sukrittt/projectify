@@ -11,6 +11,7 @@ import { activityOpts } from "~/app/(screen)/room/_constant";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { WaitingRoomInteraction } from "./waiting-room-interaction";
 import { useEstimatedQueueTime } from "~/app/(screen)/room/_hooks/useEstimatedQueueTime";
+
 interface RoomContainerProps {
   room: RoomData;
 }

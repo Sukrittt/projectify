@@ -23,6 +23,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         setCode(val);
       }}
       language={language}
+      className="h-full grow"
       theme="vs-dark"
     />
   );
