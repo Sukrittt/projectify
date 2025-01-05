@@ -11,19 +11,24 @@ interface EvaluateMinigameProps {
   question: string;
   code: string;
   handleSuccess: () => void;
+  hasNewChanges: boolean;
+  setHasNewChanges: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
   question,
   code,
   handleSuccess,
+  hasNewChanges,
+  setHasNewChanges,
 }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
   const [feedbackContainer, setFeedbackContainer] = useState(false);
 
-  const { evaluateCode, feedback, isPending } = useMiniGameEvalutor();
+  const { evaluateCode, feedback, isPending } =
+    useMiniGameEvalutor(setHasNewChanges);
 
   const { contextSafe } = useGSAP({
     scope: container,
@@ -36,7 +41,9 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
 
     handleOpenFeedbackContainer();
 
-    evaluateCode({ question, answer: code });
+    if (!hasNewChanges && feedback.length > 0) return;
+
+    // evaluateCode({ question, answer: code });
   };
 
   const handleOpenFeedbackContainer = contextSafe(() => {
@@ -50,11 +57,27 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
         background: "#1f2931",
         borderRadius: "20px",
         opacity: 1,
-        duration: 0.1,
+        width: "400px",
+        ease: "power4.out",
+        paddingTop: "16px",
+        paddingBottom: "16px",
       })
       .to(".evaluate-button", {
         height: "400px",
-        width: "400px",
+        ease: "power4.out",
+      })
+      .to(
+        ".evaluate-btn-text",
+        {
+          color: "#fff",
+          ease: "power4.out",
+        },
+        "-=1",
+      )
+      .to(".evaluate-feedback", {
+        opacity: 1,
+        display: "block",
+        ease: "power4.out",
       });
   });
 
@@ -64,56 +87,60 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
     tl.current = gsap
       .timeline()
       .to(".evaluate-button", {
-        background: "#fafafa",
-        borderRadius: "9999px",
-        duration: 0.1,
-      })
-      .to(".evaluate-button", {
         height: "36px",
-        width: "fit-content",
+        paddingTop: "8px",
+        paddingBottom: "8px",
+      })
+      .to(
+        ".evaluate-feedback",
+        {
+          opacity: 0,
+          display: "none",
+          ease: "power4.out",
+        },
+        "-=0.5",
+      )
+      .to(
+        ".evaluate-btn-text",
+        {
+          color: "#000",
+          ease: "power4.out",
+        },
+        "-=2",
+      )
+      .to(".evaluate-button", {
+        width: "auto",
+        borderRadius: "9999px",
+        background: "#fafafa",
+        ease: "power4.out",
       });
   });
 
   return (
-    <div ref={container}>
+    <div ref={container} onMouseLeave={handleCloseFeedbackContainer}>
       <div
         onClick={handleEvaluate}
         className={cn(
           "evaluate-button absolute bottom-8 right-8 h-9 cursor-pointer overflow-y-auto rounded-full bg-primary px-4 py-2 text-sm text-black transition hover:bg-primary/90",
           {
             "cursor-default opacity-60": disabled,
-            "py-4": feedbackContainer,
+            "cursor-default": feedbackContainer,
           },
         )}
       >
         <div className="flex flex-col gap-y-2">
-          <div className="flex items-center justify-between">
-            <div
-              className={cn("flex items-center gap-x-[3px]", {
-                "text-white": feedbackContainer,
-              })}
-            >
-              {isPending
-                ? "Evaluating"
-                : feedbackContainer
-                  ? "Feedback"
-                  : "Evaluate"}
-              {isPending && <LoaderDot />}
-            </div>
-
-            {feedbackContainer && (
-              <span
-                onClick={handleCloseFeedbackContainer}
-                className="text-xs text-white"
-              >
-                Close
-              </span>
-            )}
+          <div className="evaluate-btn-text flex items-center gap-x-[3px]">
+            {isPending
+              ? "Evaluating"
+              : feedbackContainer
+                ? "Feedback"
+                : "Evaluate"}
+            {isPending && <LoaderDot />}
           </div>
 
-          {feedbackContainer && (
-            <Markdown className="text-white">{feedback}</Markdown>
-          )}
+          <Markdown className="evaluate-feedback hidden text-white opacity-0">
+            {feedback}
+          </Markdown>
         </div>
       </div>
     </div>

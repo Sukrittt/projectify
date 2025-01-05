@@ -1,12 +1,13 @@
 import Markdown from "react-markdown";
 import { useEffect, useState, useRef } from "react";
 
+import { EvaluateMinigame } from "./evaluate-minigame";
 import { CodeEditor } from "~/app/_components/code-editor";
 import { useMiniGameQuestion } from "~/app/(screen)/room/_hooks/useMiniGameQuestion";
-import { EvaluateMinigame } from "./evaluate-minigame";
 
 export const CodingMiniGame = () => {
   const [codeBlock, setCodeBlock] = useState("");
+  const [hasNewChanges, setHasNewChanges] = useState(false);
 
   const { generateMinigame, question, language, isPending } =
     useMiniGameQuestion(setCodeBlock);
@@ -16,7 +17,7 @@ export const CodingMiniGame = () => {
   useEffect(() => {
     if (isPending || hasGenerated.current) return;
 
-    generateMinigame();
+    // generateMinigame();
     hasGenerated.current = true;
   }, []);
 
@@ -31,12 +32,15 @@ export const CodingMiniGame = () => {
           code={codeBlock}
           setCode={setCodeBlock}
           language={language}
+          setHasNewChanges={setHasNewChanges}
         />
       </div>
 
       <EvaluateMinigame
         question={question}
         code={codeBlock}
+        hasNewChanges={hasNewChanges}
+        setHasNewChanges={setHasNewChanges}
         handleSuccess={() => generateMinigame()}
       />
     </div>

@@ -4,7 +4,9 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "~/hooks/use-toast";
 import { type CodeEvaluatorValidatorType } from "~/types/validator";
 
-export const useMiniGameEvalutor = () => {
+export const useMiniGameEvalutor = (
+  setHasNewChanges: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
   const [feedback, setFeedback] = useState("");
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>(undefined);
 
@@ -46,6 +48,7 @@ export const useMiniGameEvalutor = () => {
           setIsCorrect(
             extractBooleanValue(accResponse) === "true" ?? undefined,
           );
+          setHasNewChanges(false);
         }
       }
     },
