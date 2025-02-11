@@ -64,7 +64,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="mx-4 flex flex-col gap-y-6 rounded-xl border bg-accent px-2 py-4">
+    <div className="mr-2 flex flex-col gap-y-6 rounded-xl border bg-accent px-2 py-4">
       {services.map((service) => (
         <Link
           key={service.href}

@@ -16,21 +16,26 @@ export const UserProfile = () => {
           <LoaderDot />
         </div>
       ) : serverData ? (
-        <div className="flex justify-end gap-x-4 pr-10">
-          <div id={"onboarding-avatar"}>
+        <div className="flex justify-end gap-x-2">
+          {/* <div id={"onboarding-avatar"}>
             <ReactNiceAvatar
               {...serverData.data.avatarConfig}
-              className="h-12 w-12"
+              className="h-6 w-6"
             />
-          </div>
+          </div> */}
 
-          <div className="flex flex-col">
+          <div className="flex flex-col items-end justify-end gap-x-4">
             <p className="text-sm">
-              {serverData.data.firstName + " " + serverData.data.lastName}
+              {serverData.data.firstName.charAt(0).toUpperCase() +
+                serverData.data.firstName.slice(1).toLowerCase()}
+              &rsquo;s workspace{" "}
             </p>
-            <p className="text-sm text-muted-foreground">
+
+            <span className="text-xs text-muted-foreground">Level #1</span>
+
+            {/* <p className="text-sm text-muted-foreground">
               Level <span className="text-foreground">#1</span>
-            </p>
+            </p> */}
           </div>
         </div>
       ) : (
