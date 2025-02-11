@@ -121,9 +121,9 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
       <div
         onClick={handleEvaluate}
         className={cn(
-          "evaluate-button absolute bottom-8 right-8 h-9 cursor-pointer overflow-y-auto rounded-full bg-primary px-4 py-2 text-sm text-black transition hover:bg-primary/90",
+          "evaluate-button absolute bottom-8 right-8 h-9 cursor-pointer overflow-y-auto rounded-xl bg-primary px-4 py-2 text-sm text-primary-foreground transition hover:bg-primary/90",
           {
-            "cursor-default opacity-60": disabled,
+            // "cursor-default opacity-60": disabled,
             "cursor-default": feedbackContainer,
           },
         )}

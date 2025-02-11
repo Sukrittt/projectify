@@ -19,13 +19,13 @@ export const SaveConfig: React.FC<SaveConfigProps> = ({ config }) => {
   };
 
   return (
-    <Dock magnification={60} distance={100} className="h-full">
+    <Dock magnification={60} distance={100} className="h-full bg-accent">
       <DockIcon>
         <CustomToolTip text="Save">
           <div
             onClick={handleUpdateUser}
             className={cn(
-              "h-8 w-8 cursor-pointer rounded-full bg-neutral-700 p-2",
+              "h-8 w-8 cursor-pointer rounded-full bg-secondary p-2",
               {
                 "cursor-default opacity-60": isPending,
               },

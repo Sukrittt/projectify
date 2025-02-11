@@ -10,7 +10,7 @@ export const FindOpponent = () => {
     <Button
       disabled={isPending}
       onClick={() => joinRoom()}
-      dotClassName="bg-black"
+      dotClassName="bg-white"
       className="gap-x-1"
     >
       {isPending ? "Finding" : "Find"} Opponent

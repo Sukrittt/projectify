@@ -4,6 +4,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
@@ -24,7 +25,6 @@ import {
   InputOTPSlot,
 } from "~/components/ui/input-otp";
 import { OAuth } from "./oauth";
-import { useRouter } from "next/navigation";
 import { useToast } from "~/hooks/use-toast";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
@@ -185,7 +185,12 @@ export const AuthForm = ({ type }: AuthFormProps) => {
   }, [form.watch("code")]);
 
   return (
-    <div className="w-full max-w-xl space-y-4 px-8 py-4">
+    <div className="w-full max-w-xl space-y-4 rounded-xl border px-8 py-8">
+      <h3 className="pb-4 text-center text-lg font-medium">
+        {type === "sign-in" ? "Sign in to" : "Sign up for"}{" "}
+        <span className="text-primary">Projectify.</span>
+      </h3>
+
       <div className="space-y-4">
         {step !== "verify-email" && (
           <>
@@ -297,8 +302,9 @@ export const AuthForm = ({ type }: AuthFormProps) => {
             {step !== "verify-email" && (
               <Button
                 type="submit"
-                className="mt-4 w-full"
+                className="mt-4 w-full gap-x-1"
                 disabled={isLoading}
+                dotClassName="bg-white"
               >
                 Continue
               </Button>

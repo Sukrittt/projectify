@@ -1,11 +1,13 @@
 .monaco-editor {
   border-radius: 12px;
   padding: 10px 0;
+  background-color: transparent !important;
 }
 
 .overflow-guard {
   border-radius: 12px;
 }
+
 .line-numbers {
   width: 30px !important;
 }
@@ -13,4 +15,8 @@
 .code-editor > div,
 .code-editor > div > section {
   height: 92.5% !important;
+}
+
+div[role="presentation"] {
+  background-color: hsl(216 56% 98%) !important;
 }

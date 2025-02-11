@@ -51,7 +51,7 @@ export const Avatar = () => {
       <div id={"onboarding-avatar"} className="mb-10">
         <ReactNiceAvatar
           {...config}
-          className="highres:w-80 highres:h-80 h-64 w-64"
+          className="highres:w-80 highres:h-80 h-32 w-32"
           hairColorRandom
           shape="circle"
         />

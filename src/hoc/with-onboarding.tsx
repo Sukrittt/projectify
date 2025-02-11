@@ -60,7 +60,6 @@ export const withOnboarding = <P extends object>(
         {!mounted || onboardingStatus === undefined ? (
           <div className="grid h-screen place-items-center">
             <div className="flex gap-x-[3px]">
-              Loading
               <LoaderDot />
             </div>
           </div>

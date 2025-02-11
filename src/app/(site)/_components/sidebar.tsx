@@ -64,15 +64,15 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="mx-4 flex flex-col gap-y-6 rounded-xl border p-4">
+    <div className="mx-4 flex flex-col gap-y-6 rounded-xl border bg-accent px-2 py-4">
       {services.map((service) => (
         <Link
           key={service.href}
           href={service.href}
           className={cn(
-            "grid h-9 w-9 place-items-center rounded-full border transition hover:border-neutral-500",
+            "grid h-9 w-9 place-items-center rounded-full border transition hover:border-ring",
             {
-              "border-neutral-500": pathname === service.href,
+              "border-ring": pathname === service.href,
             },
           )}
         >

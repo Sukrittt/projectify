@@ -23,7 +23,7 @@ export const CodingMiniGame = () => {
 
   return (
     <div className="flex h-full w-full flex-col gap-y-4 pt-4">
-      <div className="rounded-xl bg-[#1e1e1e] p-4">
+      <div className="rounded-xl bg-accent p-4">
         <Markdown className="leading-8">{`Q. ${question}`}</Markdown>
       </div>
 

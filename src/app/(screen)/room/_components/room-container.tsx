@@ -163,9 +163,9 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
               </Button>
 
               <Button
-                className="activity-content gap-x-[3px]"
                 disabled
-                dotClassName="bg-black"
+                dotClassName="bg-white"
+                className="activity-content gap-x-[3px]"
               >
                 Searching
               </Button>
@@ -190,7 +190,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
             <Button
               className="w-full gap-x-[3px]"
               disabled
-              dotClassName="bg-black"
+              dotClassName="bg-white"
             >
               Searching
             </Button>
@@ -215,14 +215,14 @@ const EstimatedQueueTime = () => {
       {!isLoading && serverData ? (
         <div className="flex items-center gap-x-2">
           <p>Estimated Queue Time</p>
-          <div className="flex h-6 w-fit items-center justify-center rounded-lg bg-slate-800 px-2">
+          <div className="flex h-6 w-fit items-center justify-center rounded-lg bg-secondary px-2">
             {serverData.data?.toFixed(0) ?? 0}s
           </div>
         </div>
       ) : (
         <div className="flex items-center gap-x-2">
           <p>Calculating estimated queue time</p>
-          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800 opacity-60">
+          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-secondary opacity-60">
             <LoaderDot className="pb-3" />
           </div>
         </div>

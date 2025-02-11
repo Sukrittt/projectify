@@ -25,7 +25,7 @@ export const UserProfile = () => {
           </div>
 
           <div className="flex flex-col">
-            <p className="text-lg">
+            <p className="text-sm">
               {serverData.data.firstName + " " + serverData.data.lastName}
             </p>
             <p className="text-sm text-muted-foreground">

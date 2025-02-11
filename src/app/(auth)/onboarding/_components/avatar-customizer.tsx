@@ -29,7 +29,7 @@ export const AvatarCustomizer = ({ config, updateConfig }: AvatarCustomize) => {
 
   return (
     <div className="relative flex items-center gap-x-4">
-      <Dock magnification={60} distance={100}>
+      <Dock magnification={60} distance={100} className="bg-accent shadow-sm">
         <DockIcon>
           <CustomToolTip text="Face">
             <ColorPicker configKey="faceColor">
@@ -141,7 +141,7 @@ const SectionWrapper: React.FC<SectionWraperProps> = ({
 
   return (
     <div
-      className={cn("h-8 w-8 cursor-pointer rounded-full bg-neutral-700 p-2", {
+      className={cn("h-8 w-8 cursor-pointer rounded-full bg-secondary p-2", {
         "cursor-default": colorPicker,
       })}
       onClick={() => {

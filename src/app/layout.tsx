@@ -1,6 +1,7 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
+import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { ClerkProvider } from "@clerk/nextjs";
 
@@ -18,13 +19,15 @@ const font = localFont({
   variable: "--font-virgil",
 });
 
+const inter = Inter({ subsets: ["latin"] });
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${font.variable}`}>
-        <body className="font-virgil">
+      <html lang="en" className={`${inter.className}`}>
+        <body>
           <TRPCReactProvider>
             <Providers>{children}</Providers>
           </TRPCReactProvider>

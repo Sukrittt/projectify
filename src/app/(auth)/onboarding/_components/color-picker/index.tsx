@@ -47,7 +47,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
       </HoverCardTrigger>
       <HoverCardContent className="w-full overflow-hidden rounded-xl bg-transparent p-0">
         <SketchPicker
-          className="!bg-[#0c1721]"
+          className="!bg-accent"
           color={color ?? undefined}
           onChange={(color) => setColor(color.hex)}
           onChangeComplete={(color) => handleColorChange(color.hex)}
