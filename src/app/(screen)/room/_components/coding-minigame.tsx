@@ -1,11 +1,15 @@
-import Markdown from "react-markdown";
+import { useAtom } from "jotai";
 import { useEffect, useState, useRef } from "react";
 
+import { streamAtom } from "~/atom";
 import { EvaluateMinigame } from "./evaluate-minigame";
 import { CodeEditor } from "~/app/_components/code-editor";
+import { StreamingMarkdown } from "~/app/_components/stream-text";
 import { useMiniGameQuestion } from "~/app/(screen)/room/_hooks/useMiniGameQuestion";
 
 export const CodingMiniGame = () => {
+  const [stream] = useAtom(streamAtom);
+
   const [codeBlock, setCodeBlock] = useState("");
   const [hasNewChanges, setHasNewChanges] = useState(false);
 
@@ -24,7 +28,13 @@ export const CodingMiniGame = () => {
   return (
     <div className="flex h-full w-full flex-col gap-y-4 pt-4">
       <div className="rounded-xl bg-accent p-4">
-        <Markdown className="text-sm leading-8">{`Q. ${question}`}</Markdown>
+        <p className="text-sm leading-8">
+          <StreamingMarkdown
+            preventStreamReset
+            speed={stream ? 10 : 0}
+            content={`Q. ${question}`}
+          />
+        </p>
       </div>
 
       <div className="code-editor grow">

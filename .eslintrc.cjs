@@ -20,6 +20,7 @@ const config = {
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/prefer-regexp-exec": "off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {

@@ -131,7 +131,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
 
   return (
     <div ref={container}>
-      <div className="room-activity-container absolute z-[9999] h-screen w-full -translate-y-[100%] bg-background">
+      <div className="room-activity-container absolute z-40 h-screen w-full -translate-y-[100%] bg-background">
         <div className="relative flex h-full flex-col gap-y-4 p-8">
           <Button
             variant="secondary"

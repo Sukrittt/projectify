@@ -13,6 +13,7 @@ export const withOnboarding = <P extends object>(
 ) => {
   return function WithOnboarding(props: P) {
     const pathname = usePathname();
+
     const [onboardingStatus, setOnboardingStatus] =
       useAtom(onboardingStatusAtom);
 
@@ -25,16 +26,27 @@ export const withOnboarding = <P extends object>(
       }
 
       const handleOnboardingRedirection = async () => {
+        console.log("onboardingStatus", onboardingStatus);
+
         if (onboardingStatus !== undefined) {
-          if (!onboardingStatus) redirect("/onboarding");
-          else if (pathname === "/onboarding") redirect("/");
+          console.log("it's not undefined");
+
+          if (!onboardingStatus) {
+            console.log("redirect to onboarding");
+            redirect("/onboarding");
+          } else if (pathname === "/onboarding") {
+            console.log("redirect to home");
+            redirect("/");
+          }
 
           return;
         }
 
         const response = await getOnboardingStatus();
 
-        if (response.data === undefined) {
+        console.log("response.data", response.data);
+
+        if (!response.ok) {
           setOnboardingStatus(false);
           redirect("/sign-in");
         }
@@ -44,6 +56,10 @@ export const withOnboarding = <P extends object>(
         setOnboardingStatus(onboardingStatusRes);
 
         if (pathname !== "/onboarding") {
+          console.log("not in onboarding page");
+
+          console.log("onboardingStatusRes", onboardingStatusRes);
+
           // Not yet onboarded
           if (!onboardingStatusRes) redirect("/onboarding");
         } else {

@@ -113,23 +113,41 @@ export const personality = {
           - Include examples or edge cases, if necessary, to illustrate the feedback.
           - Do not include any user-specific references or details in the evaluation.
           - Maintain a professional and encouraging tone.
-          - At the end of the evaluation, include the boolean value indicating if the user can proceed to the next question, wrapped with $$$$.
+          - Use relevant line breaks for better readability. Add an extra '\n' for better readability.
+	        -	Do not wrap any code snippets.
+          - Provide a JSON object containing the feedback.
 
-          Example Output:
-          The solution is correct and efficiently solves the problem. 
+          Example Output in JSON object if solution is correct (Only for example purposes):
+          {
+            "commendations": [
+              "The use of Array.reduce is concise and leverages functional programming concepts effectively.",
+              "The code handles edge cases like empty arrays correctly."
+            ],
+            "suggestions": [
+              "Consider adding comments to make the code easier to understand for others.",
+              "Test cases for arrays with large numbers could help verify the solution's robustness."
+            ],
+            "edge_cases": [
+              "An array with no even numbers: [1, 3, 5].",
+              "A mixed array with negative even numbers: [-2, 1, 4]."
+            ],
+            "can_proceed": true
+          }
 
-          Commendations:
-          - The use of Array.reduce is concise and leverages functional programming concepts effectively.
-          - The code handles edge cases like empty arrays correctly.
+          Example Output in JSON object if solution is incorrect (Only for example purposes):
+          {
+            "input": [1, 2, 3, 4],
+            "expected": 6,  
+            "output": 10,
+            "issue": "The code incorrectly includes odd numbers in the sum."
+            "can_proceed": false
+          }
 
-          Suggestions for Improvement:
-          - Consider adding comments to make the code easier to understand for others.
-          - Test cases for arrays with large numbers could help verify the solution's robustness.
-
-          Example Edge Cases to Consider:
-          - An array with no even numbers: [1, 3, 5].
-          - A mixed array with negative even numbers: [-2, 1, 4].
-
-          (No rewritten code block is needed as the solution is correct.)
+          \n
+          ^^^^  
+          function sumEvenNumbers(arr) {  
+            return arr.reduce((sum, num) => num % 2 === 0 ? sum + num : sum, 0);  
+          }  
+          ^^^^ 
         `,
 } as const;

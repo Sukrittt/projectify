@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useAtom } from "jotai";
 
 import { api } from "~/trpc/react";
+import { streamAtom } from "~/atom";
 import { toast } from "~/hooks/use-toast";
 import { type PromptValidatorType } from "~/types/validator";
 
 export const useMiniGameQuestion = (
   setCodeBlock: React.Dispatch<React.SetStateAction<string>>,
 ) => {
+  const [, setIsStreaming] = useAtom(streamAtom);
+
   const [question, setQuestion] = useState("");
   const [language, setLanguage] = useState("");
 
@@ -27,6 +31,7 @@ export const useMiniGameQuestion = (
           return;
         }
 
+        setIsStreaming(true);
         setQuestion(extractQuestion(data));
         setCodeBlock(extractBoilerPlate(data) ?? "");
         setLanguage(extractLanguage(data) ?? "");

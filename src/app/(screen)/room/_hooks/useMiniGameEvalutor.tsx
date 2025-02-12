@@ -1,13 +1,25 @@
+import { useAtom } from "jotai";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
+import { streamAtom } from "~/atom";
 import { toast } from "~/hooks/use-toast";
+import { useSideCannons } from "./useSideCannons";
+import type { CorrectSolution, IncorrectSolution } from "~/types";
 
 export const useMiniGameEvalutor = (
   setHasNewChanges: React.Dispatch<React.SetStateAction<boolean>>,
+  openDialog: () => void,
 ) => {
-  const [feedback, setFeedback] = useState("");
+  const [, setIsStreaming] = useAtom(streamAtom);
+
+  const [feedback, setFeedback] = useState<
+    CorrectSolution | IncorrectSolution | null
+  >(null);
+
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>(undefined);
+
+  const { handleFireConfetti } = useSideCannons();
 
   const { mutate: evaluateCode, isPending } = api.ai.evaluateCode.useMutation({
     onSuccess: (response) => {
@@ -21,20 +33,31 @@ export const useMiniGameEvalutor = (
         return;
       }
 
-      setFeedback(extractQuestion(data));
-      setIsCorrect(extractBooleanValue(data) === "true");
+      openDialog();
+      setIsStreaming(true);
+
+      const extractedJson = extractAndParseJSON(data) as
+        | CorrectSolution
+        | IncorrectSolution;
+
+      setFeedback(extractedJson);
       setHasNewChanges(false);
+
+      setIsCorrect(extractedJson.can_proceed);
+
+      if (!extractedJson.can_proceed) return;
+
+      handleFireConfetti();
     },
   });
 
   return { evaluateCode, isPending, feedback, isCorrect };
 };
 
-function extractBooleanValue(input: string | null | undefined) {
-  const match = input?.match(/\$\$\$\$(.*?)\$\$\$\$/s);
-  return match ? match[1]?.trim() : null;
-}
-
-function extractQuestion(input: string): string {
-  return input.replace(/\$\$\$\$.*$/s, "").trim();
+function extractAndParseJSON(response: string) {
+  const match = response.match(/```json([\s\S]*?)```/);
+  if (match?.[1]) {
+    return JSON.parse(match[1].trim());
+  }
+  return null;
 }

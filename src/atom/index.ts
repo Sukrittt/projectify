@@ -7,3 +7,5 @@ export const avatarConfigAtom =
   atom<Required<AvatarFullConfig | undefined>>(undefined);
 
 export const colorPickerAtom = atom(false);
+
+export const streamAtom = atom(false);

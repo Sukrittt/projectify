@@ -26,3 +26,5 @@ export type {
   InteractionValues,
   CodingMinigamePayload,
 } from "./room";
+
+export type { CorrectSolution, IncorrectSolution } from "./ai";

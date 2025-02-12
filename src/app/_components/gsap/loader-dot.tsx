@@ -37,19 +37,19 @@ export const LoaderDot: React.FC<LoaderDotProps> = ({
     >
       <div
         className={cn(
-          "loader-dot h-[2px] w-[2px] rounded-full bg-black opacity-0",
+          "loader-dot h-[2px] w-[2px] rounded-full bg-white opacity-0",
           dotClassName,
         )}
       />
       <div
         className={cn(
-          "loader-dot h-[2px] w-[2px] rounded-full bg-black opacity-0",
+          "loader-dot h-[2px] w-[2px] rounded-full bg-white opacity-0",
           dotClassName,
         )}
       />
       <div
         className={cn(
-          "loader-dot h-[2px] w-[2px] rounded-full bg-black opacity-0",
+          "loader-dot h-[2px] w-[2px] rounded-full bg-white opacity-0",
           dotClassName,
         )}
       />
