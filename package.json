@@ -21,6 +21,7 @@
     "@codeium/react-code-editor": "^1.0.12",
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
+    "@google/generative-ai": "^0.21.0",
     "@gsap/react": "^2.1.1",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-dialog": "^1.1.2",

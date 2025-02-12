@@ -43,7 +43,7 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
 
     if (!hasNewChanges && feedback.length > 0) return;
 
-    // evaluateCode({ question, answer: code });
+    evaluateCode({ question, answer: code });
   };
 
   const handleOpenFeedbackContainer = contextSafe(() => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 
+import { api } from "~/trpc/react";
 import { toast } from "~/hooks/use-toast";
 import { type PromptValidatorType } from "~/types/validator";
 
@@ -14,55 +14,28 @@ export const useMiniGameQuestion = (
     PromptValidatorType["previousQuestions"]
   >([]);
 
-  const { mutate: generateMinigame, isPending } = useMutation({
-    mutationFn: async () => {
-      const response = await fetch("/api/ai/generate", {
-        method: "POST",
-        body: JSON.stringify({ previousQuestions }),
-      });
+  const { mutate: generateMinigame, isPending } =
+    api.ai.generateQuestion.useMutation({
+      onSuccess: (response) => {
+        const { data } = response;
 
-      if (!response.ok) {
-        throw new Error("Failed to generate response.");
-      }
-
-      return response.body;
-    },
-    onSuccess: async (stream) => {
-      if (!stream || stream === null) {
-        toast({
-          title: "Oops, something went wrong!",
-        });
-        return;
-      } else {
-        const reader = stream.getReader();
-        const decoder = new TextDecoder();
-        let done = false;
-
-        let accResponse = "";
-
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-          done = doneReading;
-          const chunkValue = decoder.decode(value);
-
-          accResponse += chunkValue;
-
-          setQuestion(extractQuestion(accResponse));
-          setCodeBlock(extractBoilerPlate(accResponse) ?? "");
-          setLanguage(extractLanguage(accResponse) ?? "");
+        if (!data) {
+          toast({
+            title: "Oops, something went wrong!",
+            description: "Please try again later.",
+          });
+          return;
         }
 
-        setPreviousQuestions((prev) => [...prev, { question: accResponse }]);
-      }
+        setQuestion(extractQuestion(data));
+        setCodeBlock(extractBoilerPlate(data) ?? "");
+        setLanguage(extractLanguage(data) ?? "");
 
-      toast({
-        title: "Question generated!",
-        description: "Let's see what you can do!",
-      });
-    },
-  });
+        setPreviousQuestions((prev) => [...prev, { question: data }]);
+      },
+    });
 
-  return { generateMinigame, isPending, question, language };
+  return { generateMinigame, isPending, question, language, previousQuestions };
 };
 
 function extractBoilerPlate(input: string | null | undefined) {

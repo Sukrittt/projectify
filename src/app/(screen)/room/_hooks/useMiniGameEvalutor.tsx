@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
 
+import { api } from "~/trpc/react";
 import { toast } from "~/hooks/use-toast";
-import { type CodeEvaluatorValidatorType } from "~/types/validator";
 
 export const useMiniGameEvalutor = (
   setHasNewChanges: React.Dispatch<React.SetStateAction<boolean>>,
@@ -10,47 +9,21 @@ export const useMiniGameEvalutor = (
   const [feedback, setFeedback] = useState("");
   const [isCorrect, setIsCorrect] = useState<boolean | undefined>(undefined);
 
-  const { mutate: evaluateCode, isPending } = useMutation({
-    mutationFn: async ({ question, answer }: CodeEvaluatorValidatorType) => {
-      setIsCorrect(undefined);
-      const response = await fetch("/api/ai/evaluate", {
-        method: "POST",
-        body: JSON.stringify({ question, answer }),
-      });
+  const { mutate: evaluateCode, isPending } = api.ai.evaluateCode.useMutation({
+    onSuccess: (response) => {
+      const { data } = response;
 
-      if (!response.ok) {
-        throw new Error("Failed to generate response.");
-      }
-
-      return response.body;
-    },
-    onSuccess: async (stream) => {
-      if (!stream || stream === null) {
+      if (!data) {
         toast({
           title: "Oops, something went wrong!",
+          description: "Please try again later.",
         });
         return;
-      } else {
-        const reader = stream.getReader();
-        const decoder = new TextDecoder();
-        let done = false;
-
-        let accResponse = "";
-
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-          done = doneReading;
-          const chunkValue = decoder.decode(value);
-
-          accResponse += chunkValue;
-
-          setFeedback(extractQuestion(accResponse));
-          setIsCorrect(
-            extractBooleanValue(accResponse) === "true" ?? undefined,
-          );
-          setHasNewChanges(false);
-        }
       }
+
+      setFeedback(extractQuestion(data));
+      setIsCorrect(extractBooleanValue(data) === "true");
+      setHasNewChanges(false);
     },
   });
 

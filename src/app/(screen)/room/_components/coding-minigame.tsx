@@ -9,7 +9,7 @@ export const CodingMiniGame = () => {
   const [codeBlock, setCodeBlock] = useState("");
   const [hasNewChanges, setHasNewChanges] = useState(false);
 
-  const { generateMinigame, question, language, isPending } =
+  const { generateMinigame, question, language, isPending, previousQuestions } =
     useMiniGameQuestion(setCodeBlock);
 
   const hasGenerated = useRef(false);
@@ -17,14 +17,14 @@ export const CodingMiniGame = () => {
   useEffect(() => {
     if (isPending || hasGenerated.current) return;
 
-    // generateMinigame();
+    generateMinigame({ previousQuestions });
     hasGenerated.current = true;
   }, []);
 
   return (
     <div className="flex h-full w-full flex-col gap-y-4 pt-4">
       <div className="rounded-xl bg-accent p-4">
-        <Markdown className="leading-8">{`Q. ${question}`}</Markdown>
+        <Markdown className="text-sm leading-8">{`Q. ${question}`}</Markdown>
       </div>
 
       <div className="code-editor grow">
@@ -41,7 +41,7 @@ export const CodingMiniGame = () => {
         code={codeBlock}
         hasNewChanges={hasNewChanges}
         setHasNewChanges={setHasNewChanges}
-        handleSuccess={() => generateMinigame()}
+        handleSuccess={() => generateMinigame({ previousQuestions })}
       />
     </div>
   );
