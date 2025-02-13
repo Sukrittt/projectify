@@ -116,8 +116,9 @@ export const personality = {
           - Use relevant line breaks for better readability. Add an extra '\n' for better readability.
 	        -	Do not wrap any code snippets.
           - Provide a JSON object containing the feedback.
+          - Use example output I when the solution is correct and example output II when the solution is incorrect.
 
-          Example Output in JSON object if solution is correct (Only for example purposes):
+          I. Example Output in JSON object if solution is correct (Only for example purposes):
           {
             "commendations": [
               "The use of Array.reduce is concise and leverages functional programming concepts effectively.",
@@ -131,23 +132,20 @@ export const personality = {
               "An array with no even numbers: [1, 3, 5].",
               "A mixed array with negative even numbers: [-2, 1, 4]."
             ],
+            "performance_notes": [
+              "The algorithm runs in O(n) time complexity, making it efficient for large arrays.",
+              "Consider the space complexity for larger input sizes to ensure scalability."
+            ],
             "can_proceed": true
           }
 
-          Example Output in JSON object if solution is incorrect (Only for example purposes):
+          II. Example Output in JSON object if solution is incorrect (Only for example purposes):
           {
-            "input": [1, 2, 3, 4],
-            "expected": 6,  
-            "output": 10,
-            "issue": "The code incorrectly includes odd numbers in the sum."
+            "input": "[1, 2, 3, 4]",
+            "expected": "6",  
+            "output": "10",
+            "issue": "The code incorrectly includes odd numbers in the sum.",
             "can_proceed": false
           }
-
-          \n
-          ^^^^  
-          function sumEvenNumbers(arr) {  
-            return arr.reduce((sum, num) => num % 2 === 0 ? sum + num : sum, 0);  
-          }  
-          ^^^^ 
         `,
 } as const;
