@@ -9,12 +9,13 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { streamAtom } from "~/atom";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { StreamingMarkdown } from "~/app/_components/stream-text";
 import type { CorrectSolution, IncorrectSolution } from "~/types";
 import { useMiniGameEvalutor } from "~/app/(screen)/room/_hooks/useMiniGameEvalutor";
 import { CustomToolTip } from "~/components/ui/custom-tool-tip";
+import { cn } from "~/lib/utils";
 
 interface EvaluateMinigameProps {
   question: string;
@@ -42,7 +43,7 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
     () => setOpen(true),
   );
 
-  const disabled = isPending || !question || !code;
+  const disabled = isPending || !question || !code || !hasNewChanges;
 
   const handleEvaluate = () => {
     if (disabled) return;
@@ -72,15 +73,15 @@ export const EvaluateMinigame: React.FC<EvaluateMinigameProps> = ({
       <div className="flex justify-end gap-x-2">
         <CustomToolTip text="⌘ + '">
           <div>
-            <Button
-              disableLoader
-              disabled={isPending || !hasNewChanges}
+            <div
               onClick={handleEvaluate}
-              className="gap-x-1"
+              className={cn(buttonVariants(), "gap-x-1", {
+                "cursor-default opacity-60": isPending || !hasNewChanges,
+              })}
             >
               {isPending ? "Evaluating" : "Evaluate"}
               {isPending && <LoaderDot />}
-            </Button>
+            </div>
           </div>
         </CustomToolTip>
 

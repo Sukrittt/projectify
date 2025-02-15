@@ -2,11 +2,11 @@ import { useAtom } from "jotai";
 import { useEffect, useState, useRef } from "react";
 
 import { streamAtom } from "~/atom";
+import { Skeleton } from "~/components/ui/skeleton";
 import { EvaluateMinigame } from "./evaluate-minigame";
 import { CodeEditor } from "~/app/_components/code-editor";
 import { StreamingMarkdown } from "~/app/_components/stream-text";
 import { useMiniGameQuestion } from "~/app/(screen)/room/_hooks/useMiniGameQuestion";
-import { Skeleton } from "~/components/ui/skeleton";
 
 export const CodingMiniGame = () => {
   const [stream] = useAtom(streamAtom);
@@ -14,13 +14,15 @@ export const CodingMiniGame = () => {
   const [codeBlock, setCodeBlock] = useState("");
   const [hasNewChanges, setHasNewChanges] = useState(false);
 
-  const { generateMinigame, question, language, isPending, previousQuestions } =
+  const { generateMinigame, question, language, previousQuestions } =
     useMiniGameQuestion(setCodeBlock);
 
   const hasGenerated = useRef(false);
 
+  const isPending = question.length === 0;
+
   useEffect(() => {
-    if (isPending || hasGenerated.current) return;
+    if (hasGenerated.current) return;
 
     generateMinigame({ previousQuestions });
     hasGenerated.current = true;
