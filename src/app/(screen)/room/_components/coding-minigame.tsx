@@ -32,7 +32,7 @@ export const CodingMiniGame = () => {
     <div className="flex h-full w-full flex-col gap-y-4 pt-4">
       <div className="rounded-xl bg-accent p-4">
         <div className="text-sm leading-8">
-          {isPending ? (
+          {question.length === 0 ? (
             <Skeleton className="h-4 w-full" />
           ) : (
             <StreamingMarkdown
@@ -45,7 +45,7 @@ export const CodingMiniGame = () => {
       </div>
 
       <div className="code-editor grow">
-        {isPending ? (
+        {question.length === 0 ? (
           <div className="h-96 rounded-xl bg-accent p-4">
             <Skeleton className="h-full w-full rounded-xl" />
           </div>
@@ -60,7 +60,7 @@ export const CodingMiniGame = () => {
       </div>
 
       <EvaluateMinigame
-        isLoading={isPending}
+        isLoading={question.length === 0}
         code={codeBlock}
         question={question}
         hasNewChanges={hasNewChanges}

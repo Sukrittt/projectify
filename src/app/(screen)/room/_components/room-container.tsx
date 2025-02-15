@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "~/lib/utils";
+import { TipsAndTricks } from "./tips-tricks";
 import { Button } from "~/components/ui/button";
 import { CodingMiniGame } from "./coding-minigame";
 import type { InteractionData, RoomData } from "~/types";
@@ -131,8 +132,8 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
 
   return (
     <div ref={container}>
-      <div className="room-activity-container absolute z-40 h-screen w-full -translate-y-[100%] bg-background">
-        <div className="relative flex h-full flex-col gap-y-4 p-8">
+      <div className="room-activity-container bg-gradient-radial absolute z-40 h-screen w-full -translate-y-[100%] from-[#ffe4ec] via-pink-500 to-[#ffffff]">
+        <div className="relative flex h-full flex-col gap-y-4 bg-white/30 p-8 backdrop-blur-md">
           <Button
             variant="secondary"
             onClick={handleActivityClose}
@@ -175,6 +176,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
           {/* Activity Content */}
           <div className="activity-content h-full">
             {activity?.value === "coding-minigames" && <CodingMiniGame />}
+            {activity?.value === "tips-and-tricks" && <TipsAndTricks />}
           </div>
         </div>
       </div>
