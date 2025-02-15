@@ -1,8 +1,7 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { GeistSans } from "geist/font/sans";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import { TRPCReactProvider } from "~/trpc/react";
@@ -14,19 +13,12 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const font = localFont({
-  src: "../../public/fonts/virgil.woff2",
-  variable: "--font-virgil",
-});
-
-const inter = Inter({ subsets: ["latin"] });
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${inter.className}`}>
+      <html lang="en" className={GeistSans.className}>
         <body>
           <TRPCReactProvider>
             <Providers>{children}</Providers>
