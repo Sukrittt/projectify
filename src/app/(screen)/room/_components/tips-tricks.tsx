@@ -1,36 +1,24 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { act, useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { useTips } from "~/app/(screen)/room/_hooks/useTips";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
-
-const tips = [
-  "Use meaningful variable names to improve code clarity.",
-  "Write small, reusable functions to enhance maintainability.",
-  "Use version control (Git) and commit frequently with meaningful messages.",
-  "Master your IDE shortcuts to speed up development.",
-  "Use linters and formatters like ESLint and Prettier for cleaner code.",
-  "Optimize loops and conditions by avoiding unnecessary computations.",
-  "Write unit tests using frameworks like Jest or Mocha for reliability.",
-  "Learn regex to efficiently handle pattern matching and text processing.",
-  "Use console.log and debugger breakpoints wisely for better debugging.",
-  "Read documentation and explore source code to improve problem-solving skills.",
-];
 
 export const TipsAndTricks = () => {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
-  const [activeTipIndex, setActiveTipIndex] = useState(
-    Math.floor(Math.random() * tips.length),
-  );
+  const [, setVisitedTipIndexes] = useState<number[]>([]);
 
-  const [loading, setLoading] = useState(false);
+  const { data: tips, isLoading } = useTips();
+
+  const [activeTipIndex, setActiveTipIndex] = useState(
+    Math.floor(Math.random() * (tips?.data?.length ?? 0)),
+  );
 
   const { contextSafe } = useGSAP(
     () => {
-      console.log("container gsap running");
-
       tl.current = gsap.timeline().to(".tips", {
         opacity: 1,
         ease: "power4.in",
@@ -42,25 +30,42 @@ export const TipsAndTricks = () => {
   );
 
   const handleShowNextTip = contextSafe(() => {
-    let newTipIndex;
+    if (!tips) return;
 
-    do {
-      newTipIndex = Math.floor(Math.random() * tips.length);
-    } while (newTipIndex === activeTipIndex);
+    const totalTips = tips.data.length;
 
-    tl.current = gsap
-      .timeline()
-      .to(".tips", {
-        opacity: 0,
-        ease: "power4.out",
-        onComplete: () => {
-          setActiveTipIndex(newTipIndex);
-        },
-      })
-      .to(`.tips`, {
-        opacity: 1,
-        ease: "power4.in",
-      });
+    setVisitedTipIndexes((prev) => {
+      const visitedSet = new Set(prev);
+
+      // Reset if all tips are visited
+      if (visitedSet.size === totalTips - 1) {
+        visitedSet.clear();
+      }
+
+      let newTipIndex;
+      do {
+        newTipIndex = Math.floor(Math.random() * totalTips);
+      } while (visitedSet.has(newTipIndex) || newTipIndex === activeTipIndex);
+
+      visitedSet.add(newTipIndex);
+
+      tl.current = gsap
+        .timeline()
+        .to(".tips", {
+          opacity: 0,
+          ease: "power4.out",
+          onComplete: () => {
+            setActiveTipIndex(newTipIndex);
+            setVisitedTipIndexes(Array.from(visitedSet));
+          },
+        })
+        .to(".tips", {
+          opacity: 1,
+          ease: "power4.in",
+        });
+
+      return Array.from(visitedSet);
+    });
   });
 
   useEffect(() => {
@@ -69,33 +74,21 @@ export const TipsAndTricks = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const handleLoader = async () => {
-      try {
-        setLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 3_000));
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void handleLoader();
-  }, []);
+  }, [handleShowNextTip]);
 
   return (
     <div
       ref={container}
       className="relative flex h-full w-full items-center justify-center pt-4"
     >
-      {loading ? (
+      {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">
           <LoaderDot dotClassName="bg-black" className="mt-0" />
         </div>
       ) : (
-        <p className={`tips text-[14px] opacity-0`}>{tips[activeTipIndex]}</p>
+        <p className={`tips text-[14px] opacity-0`}>
+          {tips?.data[activeTipIndex]}
+        </p>
       )}
     </div>
   );

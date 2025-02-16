@@ -1,9 +1,11 @@
+import { TRPCError } from "@trpc/server";
+
 import apiClient from "~/utils/axios";
-import { CodeEvaluatorValidator, PromptValidator } from "~/types/validator";
 import { personality } from "~/constants/ai";
-import type { CodingMinigamePayload } from "~/types";
 import { generateContentWithGemini } from "~/lib/gemini";
+import type { CodingMinigamePayload, TipsPayload } from "~/types";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
+import { CodeEvaluatorValidator, PromptValidator } from "~/types/validator";
 
 export const aiRouter = createTRPCRouter({
   generateQuestion: privateProcedure
@@ -11,12 +13,9 @@ export const aiRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { previousQuestions } = input;
 
-      const response = await apiClient.post(
-        `/generate/payload/coding-minigame`,
-        {
-          clerkId: ctx.user.id,
-        },
-      );
+      const response = await apiClient.post(`/generate/payload/waiting-room`, {
+        clerkId: ctx.user.id,
+      });
 
       const payload = {
         ...response.data,
@@ -52,4 +51,41 @@ export const aiRouter = createTRPCRouter({
         message: "Successfully generated question.",
       };
     }),
+  generateTips: privateProcedure.query(async ({ ctx }) => {
+    const response = await apiClient.post(`/generate/payload/waiting-room`, {
+      clerkId: ctx.user.id,
+    });
+
+    const payload = {
+      ...response.data,
+    } as Omit<CodingMinigamePayload, "previousQuestions">;
+
+    const data = await generateContentWithGemini(
+      JSON.stringify(payload),
+      personality.TIPS_GENERATOR,
+    );
+
+    if (!data) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Failed to generate tips.",
+      });
+    }
+
+    const formattedTips = extractAndParseJSON(data).tips as TipsPayload["tips"];
+
+    return {
+      ok: true,
+      data: formattedTips,
+      message: "Successfully generated tips.",
+    };
+  }),
 });
+
+function extractAndParseJSON(response: string) {
+  const match = response.match(/```json([\s\S]*?)```/);
+  if (match?.[1]) {
+    return JSON.parse(match[1].trim());
+  }
+  return null;
+}

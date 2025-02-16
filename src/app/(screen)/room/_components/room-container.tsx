@@ -132,13 +132,25 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
 
   return (
     <div ref={container}>
-      <div className="room-activity-container bg-gradient-radial absolute z-40 h-screen w-full -translate-y-[100%] from-[#ffe4ec] via-pink-500 to-[#ffffff]">
-        <div className="relative flex h-full flex-col gap-y-4 bg-white/30 p-8 backdrop-blur-md">
+      <div
+        className={cn(
+          "room-activity-container absolute -z-40 h-screen w-full",
+          {
+            "z-50": !!activity,
+          },
+        )}
+      >
+        <div className="relative flex h-full flex-col gap-y-4 p-8">
           <Button
             variant="secondary"
             onClick={handleActivityClose}
-            disabled={isClosing}
-            className="activity-content absolute bottom-8 left-8 gap-x-[3px]"
+            disabled={isClosing || !activity}
+            className={cn(
+              "activity-content absolute bottom-8 left-8 z-50 gap-x-[3px]",
+              {
+                "opacity-0": !activity,
+              },
+            )}
           >
             {isClosing ? "Closing" : "Close"}
           </Button>
@@ -150,11 +162,19 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
               </div>
               <p className="activity-content">{activity?.label}</p>
 
-              <span className="activity-content">|</span>
+              <span
+                className={cn("activity-content", {
+                  "opacity-0": !activity,
+                })}
+              >
+                |
+              </span>
 
               <TimeTracker
                 createdAt={room.data.createdAt}
-                className="activity-content text-muted-foreground"
+                className={cn("activity-content text-muted-foreground", {
+                  "opacity-0": !activity,
+                })}
               />
             </div>
 

@@ -45,7 +45,7 @@ export const WaitingRoomInteraction: React.FC<WaitingRoomInteractionProps> = ({
               await handleLoadPromise(option.value);
             }}
             className={cn(
-              `room-interaction-${option.value} flex w-[250px] cursor-pointer flex-col items-center justify-center gap-y-2 rounded-xl border px-4 py-8 transition duration-300 hover:border-ring hover:bg-accent`,
+              `room-interaction-${option.value} group flex w-[250px] cursor-pointer flex-col items-center justify-center gap-y-2 rounded-xl border px-4 py-8 transition duration-300`,
               {
                 "cursor-default opacity-60 hover:border-border":
                   loading === option.value,
@@ -57,7 +57,9 @@ export const WaitingRoomInteraction: React.FC<WaitingRoomInteractionProps> = ({
             ) : (
               option.icon
             )}
-            <p className="text-sm text-muted-foreground">{option.label}</p>
+            <p className="text-sm text-muted-foreground transition group-hover:text-foreground">
+              {option.label}
+            </p>
           </div>
         ))}
       </div>

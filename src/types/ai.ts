@@ -13,3 +13,7 @@ export type IncorrectSolution = {
   issue: string;
   can_proceed: boolean;
 };
+
+export type TipsPayload = {
+  tips: string[];
+};

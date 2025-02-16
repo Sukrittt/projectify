@@ -26,7 +26,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         setHasNewChanges(true);
       }}
       language={language}
-      className="h-full grow rounded-xl bg-accent"
+      className="h-full grow"
       theme="vs-light"
     />
   );

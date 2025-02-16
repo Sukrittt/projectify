@@ -27,4 +27,4 @@ export type {
   CodingMinigamePayload,
 } from "./room";
 
-export type { CorrectSolution, IncorrectSolution } from "./ai";
+export type { CorrectSolution, IncorrectSolution, TipsPayload } from "./ai";
