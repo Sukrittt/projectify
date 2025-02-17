@@ -12,12 +12,12 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { redirect, usePathname } from "next/navigation";
 
 import { cn } from "~/lib/utils";
-import { toast } from "~/hooks/use-toast";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { CustomToolTip } from "~/components/ui/custom-tool-tip";
 
@@ -100,9 +100,7 @@ const ManageUser = () => {
     } catch (e) {
       console.log("Error", e);
 
-      toast({
-        title: "Uh oh! Something went wrong",
-      });
+      toast.error("Oops, something went wrong!");
     } finally {
       setLoading(false);
     }

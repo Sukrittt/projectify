@@ -1,7 +1,7 @@
+import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { toast } from "~/hooks/use-toast";
 import { Gradient } from "~/app/_components/gradient";
 import { getOnboardingStatus } from "~/app/_actions/user";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
@@ -29,8 +29,7 @@ export const withOnboarding = <P extends object>(
           if (!onboardingStatusRes) router.push("/onboarding");
         } catch (error) {
           console.log("error", error);
-          toast({
-            title: "Looks like something is broken.",
+          toast.error("Looks like something is broken.", {
             description: "We're working on fixing this issue.",
           });
         } finally {

@@ -1,7 +1,7 @@
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/react";
-import { toast } from "~/hooks/use-toast";
 
 export const useJoinRoom = () => {
   const router = useRouter();
@@ -9,9 +9,8 @@ export const useJoinRoom = () => {
     onSuccess: () => {
       router.push("/room");
 
-      toast({
-        title: "Moving to waiting room.",
-        description: "Meanwhile help yourself with our warm up challenges.",
+      toast("Moving you to waiting room.", {
+        description: "Enjoy our waiting room activities.",
       });
 
       // Start listening to pusher event

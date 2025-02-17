@@ -1,9 +1,9 @@
+import { toast } from "sonner";
 import { useAtom } from "jotai";
 import { useState } from "react";
 
 import { api } from "~/trpc/react";
 import { streamAtom } from "~/atom";
-import { toast } from "~/hooks/use-toast";
 import { useSideCannons } from "./useSideCannons";
 import type { CorrectSolution, IncorrectSolution } from "~/types";
 
@@ -26,10 +26,7 @@ export const useMiniGameEvalutor = (
       const { data } = response;
 
       if (!data) {
-        toast({
-          title: "Oops, something went wrong!",
-          description: "Please try again later.",
-        });
+        toast.error("Oops, something went wrong!");
         return;
       }
 

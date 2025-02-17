@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -25,7 +26,6 @@ import {
   InputOTPSlot,
 } from "~/components/ui/input-otp";
 import { OAuth } from "./oauth";
-import { useToast } from "~/hooks/use-toast";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useClerkError } from "~/hooks/use-clerk-error";
@@ -61,7 +61,6 @@ interface AuthFormProps {
 }
 
 export const AuthForm = ({ type }: AuthFormProps) => {
-  const { toast } = useToast();
   const router = useRouter();
 
   const { catchClerkError } = useClerkError();
@@ -102,8 +101,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
       });
 
       setStep("verify-email");
-      toast({
-        title: "Check your email",
+      toast("Check your email", {
         description: "We sent you a 6-digit verification code.",
       });
     } catch (err) {
@@ -140,8 +138,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
     if (!isSignUpLoaded) return;
 
     if (!data.code || data.code.length !== 6) {
-      toast({
-        title: "Oops! Something went wrong",
+      toast.error("Oops! Something went wrong", {
         description: "Looks like you entered an invalid code.",
       });
       return;

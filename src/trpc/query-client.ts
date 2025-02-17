@@ -2,8 +2,8 @@ import {
   defaultShouldDehydrateQuery,
   QueryClient,
 } from "@tanstack/react-query";
+import { toast } from "sonner";
 import SuperJSON from "superjson";
-import { toast } from "~/hooks/use-toast";
 
 export const createQueryClient = () =>
   new QueryClient({
@@ -26,8 +26,7 @@ export const createQueryClient = () =>
         onError: (error) => {
           const { message } = error;
 
-          toast({
-            title: "Oops, Something went wrong.",
+          toast("Oops, Something went wrong.", {
             description: message,
           });
         },
