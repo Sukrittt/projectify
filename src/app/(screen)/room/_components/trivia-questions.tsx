@@ -6,16 +6,16 @@ export const TriviaQuestions = () => {
       </p>
 
       <div className="grid w-full max-w-4xl grid-cols-2 gap-2">
-        <div className="cursor-pointer rounded-xl border px-4 py-1.5 transition hover:border-neutral-200">
+        <div className="cursor-pointer rounded-xl bg-secondary/20 px-4 py-1.5 transition hover:bg-secondary/40">
           Assembly Language
         </div>
-        <div className="cursor-pointer rounded-xl border px-4 py-1.5 transition hover:border-neutral-200">
+        <div className="cursor-pointer rounded-xl bg-secondary/20 px-4 py-1.5 transition hover:bg-secondary/40">
           Fortran
         </div>
-        <div className="cursor-pointer rounded-xl border px-4 py-1.5 transition hover:border-neutral-200">
+        <div className="cursor-pointer rounded-xl bg-secondary/20 px-4 py-1.5 transition hover:bg-secondary/40">
           COBOL
         </div>
-        <div className="cursor-pointer rounded-xl border px-4 py-1.5 transition hover:border-neutral-200">
+        <div className="cursor-pointer rounded-xl bg-secondary/20 px-4 py-1.5 transition hover:bg-secondary/40">
           C
         </div>
       </div>
