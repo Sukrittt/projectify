@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Gradient } from "~/app/_components/gradient";
 import { getOnboardingStatus } from "~/app/_actions/user";
@@ -11,7 +11,10 @@ export const withOnboarding = <P extends object>(
 ) => {
   return function WithOnboarding(props: P) {
     const router = useRouter();
+    const pathname = usePathname();
+
     const [loading, setLoading] = useState(false);
+    const isOnboardingPage = pathname === "/onboarding";
 
     useEffect(() => {
       const handleFetchOnboardingStatus = async () => {
@@ -21,24 +24,28 @@ export const withOnboarding = <P extends object>(
           const response = await getOnboardingStatus();
 
           if (!response.ok) {
-            router.push("/someother");
+            router.push("/sign-in");
           }
 
           const onboardingStatusRes = response.data;
 
-          if (!onboardingStatusRes) router.push("/onboarding");
+          if (!onboardingStatusRes) {
+            router.push("/onboarding");
+          } else if (isOnboardingPage) {
+            router.push("/");
+          }
+
+          setLoading(false);
         } catch (error) {
           console.log("error", error);
           toast.error("Looks like something is broken.", {
             description: "We're working on fixing this issue.",
           });
-        } finally {
-          setLoading(false);
         }
       };
 
       void handleFetchOnboardingStatus();
-    }, [router]);
+    }, [router, isOnboardingPage]);
 
     return (
       <>

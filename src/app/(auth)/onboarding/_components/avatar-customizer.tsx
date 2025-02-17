@@ -25,99 +25,121 @@ interface AvatarCustomize {
 }
 
 export const AvatarCustomizer = ({ config, updateConfig }: AvatarCustomize) => {
-  if (!config) return null;
-
   return (
     <div className="relative flex items-center gap-x-4">
-      <Dock magnification={60} distance={100} className="bg-accent shadow-sm">
-        <DockIcon>
+      <Dock
+        magnification={60}
+        distance={100}
+        className="doc-container scale-0 bg-transparent opacity-0"
+      >
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Face">
             <ColorPicker configKey="faceColor">
-              <SectionWrapper>
-                <Face color={config.faceColor} />
-              </SectionWrapper>
+              {config && (
+                <SectionWrapper>
+                  <Face color={config.faceColor} />
+                </SectionWrapper>
+              )}
             </ColorPicker>
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Hair">
             <ColorPicker configKey="hairColor">
-              <SectionWrapper
-                onClick={() => updateConfig("hairStyle", config.hairStyle)}
-              >
-                <Hair
-                  style={config.hairStyle}
-                  color={config.hairColor}
-                  colorRandom
-                />
-              </SectionWrapper>
+              {config && (
+                <SectionWrapper
+                  onClick={() => updateConfig("hairStyle", config.hairStyle)}
+                >
+                  <Hair
+                    style={config.hairStyle}
+                    color={config.hairColor}
+                    colorRandom
+                  />
+                </SectionWrapper>
+              )}
             </ColorPicker>
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Hat">
             <ColorPicker configKey="hatColor">
-              <SectionWrapper
-                onClick={() => updateConfig("hatStyle", config.hatStyle)}
-              >
-                <Hat style={config.hatStyle} color={config.hatColor} />
-              </SectionWrapper>
+              {config && (
+                <SectionWrapper
+                  onClick={() => updateConfig("hatStyle", config.hatStyle)}
+                >
+                  <Hat style={config.hatStyle} color={config.hatColor} />
+                </SectionWrapper>
+              )}
             </ColorPicker>
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Eyes">
-            <SectionWrapper
-              onClick={() => updateConfig("eyeStyle", config.eyeStyle)}
-            >
-              <Eyes style={config.eyeStyle} />
-            </SectionWrapper>
+            {config && (
+              <SectionWrapper
+                onClick={() => updateConfig("eyeStyle", config.eyeStyle)}
+              >
+                <Eyes style={config.eyeStyle} />
+              </SectionWrapper>
+            )}
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Glasses">
-            <SectionWrapper
-              onClick={() => updateConfig("glassesStyle", config.glassesStyle)}
-            >
-              <Glasses style={config.glassesStyle} />
-            </SectionWrapper>
+            {config && (
+              <SectionWrapper
+                onClick={() =>
+                  updateConfig("glassesStyle", config.glassesStyle)
+                }
+              >
+                <Glasses style={config.glassesStyle} />
+              </SectionWrapper>
+            )}
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Ear">
-            <SectionWrapper
-              onClick={() => updateConfig("earSize", config.earSize)}
-            >
-              <Ear size={config.earSize} color={config.faceColor} />
-            </SectionWrapper>
+            {config && (
+              <SectionWrapper
+                onClick={() => updateConfig("earSize", config.earSize)}
+              >
+                <Ear size={config.earSize} color={config.faceColor} />
+              </SectionWrapper>
+            )}
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Nose">
-            <SectionWrapper
-              onClick={() => updateConfig("noseStyle", config.noseStyle)}
-            >
-              <Nose style={config.noseStyle} />
-            </SectionWrapper>
+            {config && (
+              <SectionWrapper
+                onClick={() => updateConfig("noseStyle", config.noseStyle)}
+              >
+                <Nose style={config.noseStyle} />
+              </SectionWrapper>
+            )}
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Mouth">
-            <SectionWrapper
-              onClick={() => updateConfig("mouthStyle", config.mouthStyle)}
-            >
-              <Mouth style={config.mouthStyle} />
-            </SectionWrapper>
+            {config && (
+              <SectionWrapper
+                onClick={() => updateConfig("mouthStyle", config.mouthStyle)}
+              >
+                <Mouth style={config.mouthStyle} />
+              </SectionWrapper>
+            )}
           </CustomToolTip>
         </DockIcon>
-        <DockIcon>
+        <DockIcon className="doc-item scale-0 opacity-0">
           <CustomToolTip text="Shirt">
             <ColorPicker configKey="shirtColor">
-              <SectionWrapper
-                onClick={() => updateConfig("shirtStyle", config.shirtStyle)}
-              >
-                <Shirt style={config.shirtStyle} color={config.shirtColor} />
-              </SectionWrapper>
+              {config && (
+                <SectionWrapper
+                  onClick={() => updateConfig("shirtStyle", config.shirtStyle)}
+                >
+                  <Shirt style={config.shirtStyle} color={config.shirtColor} />
+                </SectionWrapper>
+              )}
             </ColorPicker>
           </CustomToolTip>
         </DockIcon>

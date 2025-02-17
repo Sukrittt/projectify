@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { Check } from "lucide-react";
 import { type AvatarFullConfig } from "react-nice-avatar";
 
@@ -8,19 +9,28 @@ import { CustomToolTip } from "~/components/ui/custom-tool-tip";
 import { useUpdateUser } from "~/app/(auth)/onboarding/_hooks/useUpdateUser";
 
 interface SaveConfigProps {
-  config: AvatarFullConfig;
+  config: AvatarFullConfig | undefined;
 }
 
 export const SaveConfig: React.FC<SaveConfigProps> = ({ config }) => {
   const { mutate: updateUser, isPending } = useUpdateUser();
 
   const handleUpdateUser = () => {
+    if (!config) {
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
+
     updateUser({ avatarConfig: JSON.stringify(config) });
   };
 
   return (
-    <Dock magnification={60} distance={100} className="h-full bg-accent">
-      <DockIcon>
+    <Dock
+      magnification={60}
+      distance={100}
+      className="doc-container h-full scale-0 bg-transparent opacity-0"
+    >
+      <DockIcon className="doc-item scale-0 opacity-0">
         <CustomToolTip text="Save">
           <div
             onClick={handleUpdateUser}
