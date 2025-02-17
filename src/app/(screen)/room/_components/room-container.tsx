@@ -7,6 +7,7 @@ import { cn } from "~/lib/utils";
 import { TipsAndTricks } from "./tips-tricks";
 import { Button } from "~/components/ui/button";
 import { CodingMiniGame } from "./coding-minigame";
+import { TriviaQuestions } from "./trivia-questions";
 import type { InteractionData, RoomData } from "~/types";
 import { activityOpts } from "~/app/(screen)/room/_constant";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
@@ -197,6 +198,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
           <div className="activity-content h-full">
             {activity?.value === "coding-minigames" && <CodingMiniGame />}
             {activity?.value === "tips-and-tricks" && <TipsAndTricks />}
+            {activity?.value === "trivia" && <TriviaQuestions />}
           </div>
         </div>
       </div>

@@ -45,10 +45,9 @@ export const WaitingRoomInteraction: React.FC<WaitingRoomInteractionProps> = ({
               await handleLoadPromise(option.value);
             }}
             className={cn(
-              `room-interaction-${option.value} group flex w-[250px] cursor-pointer flex-col items-center justify-center gap-y-2 rounded-xl border px-4 py-8 transition duration-300`,
+              `room-interaction-${option.value} group flex w-[250px] cursor-pointer flex-col items-center justify-center gap-y-2 px-4 py-8 transition duration-300`,
               {
-                "cursor-default opacity-60 hover:border-border":
-                  loading === option.value,
+                "cursor-default opacity-60": loading === option.value,
               },
             )}
           >

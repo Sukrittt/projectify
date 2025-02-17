@@ -86,7 +86,7 @@ export const TipsAndTricks = () => {
           <LoaderDot dotClassName="bg-black" className="mt-0" />
         </div>
       ) : (
-        <p className={`tips text-[14px] opacity-0`}>
+        <p className="tips text-[14px] opacity-0">
           {tips?.data[activeTipIndex]}
         </p>
       )}
