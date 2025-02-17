@@ -59,7 +59,7 @@ export const OAuth = () => {
             disableLoader
           >
             {isLoading === provider.strategy ? (
-              <LoaderDot className="pb-1.5 pr-1" />
+              <LoaderDot className="pb-1.5 pr-1" dotClassName="bg-black" />
             ) : (
               <Icon className="mr-2 h-3.5 w-3.5" />
             )}

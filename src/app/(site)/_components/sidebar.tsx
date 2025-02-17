@@ -64,7 +64,7 @@ export const Sidebar = () => {
   ];
 
   return (
-    <div className="mr-2 flex flex-col gap-y-6 rounded-xl border bg-accent px-2 py-4">
+    <div className="mr-2 flex flex-col gap-y-6 rounded-xl border px-2 py-4">
       {services.map((service) => (
         <Link
           key={service.href}
@@ -91,7 +91,7 @@ const ManageUser = () => {
   const { user } = useUser();
   const { signOut } = useClerk();
 
-  const handleUserAuth = async () => {
+  const handleSignOut = async () => {
     try {
       setLoading(true);
 
@@ -110,9 +110,9 @@ const ManageUser = () => {
 
   return (
     <div
-      onClick={handleUserAuth}
+      onClick={handleSignOut}
       className={cn(
-        "mt-auto grid h-9 w-9 place-items-center rounded-full border transition hover:border-neutral-500",
+        "mt-auto grid h-9 w-9 place-items-center rounded-full border transition hover:border-ring",
         {
           "cursor-default opacity-60": loading,
         },
@@ -120,7 +120,7 @@ const ManageUser = () => {
     >
       <CustomToolTip text={loading ? "Loading" : user ? "Logout" : "Sign in"}>
         {loading ? (
-          <LoaderDot className="pb-0" />
+          <LoaderDot className="pb-0" dotClassName="bg-black" />
         ) : user ? (
           <LogOut className="h-4 w-4" />
         ) : (

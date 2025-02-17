@@ -1,10 +1,8 @@
-import { useAtom } from "jotai";
-import { useEffect } from "react";
-import { redirect, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { publicRoutes } from "~/constants";
-import { onboardingStatusAtom } from "~/atom";
-import { useMounted } from "~/hooks/use-mounted";
+import { toast } from "~/hooks/use-toast";
+import { Gradient } from "~/app/_components/gradient";
 import { getOnboardingStatus } from "~/app/_actions/user";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 
@@ -12,71 +10,44 @@ export const withOnboarding = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ) => {
   return function WithOnboarding(props: P) {
-    const pathname = usePathname();
-
-    const [onboardingStatus, setOnboardingStatus] =
-      useAtom(onboardingStatusAtom);
-
-    const mounted = useMounted();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-      if (publicRoutes.includes(pathname)) {
-        setOnboardingStatus(false);
-        return;
-      }
+      const handleFetchOnboardingStatus = async () => {
+        try {
+          setLoading(true);
 
-      const handleOnboardingRedirection = async () => {
-        // console.log("onboardingStatus", onboardingStatus);
+          const response = await getOnboardingStatus();
 
-        if (onboardingStatus !== undefined) {
-          // console.log("it's not undefined");
-
-          if (!onboardingStatus) {
-            // console.log("redirect to onboarding");
-            redirect("/onboarding");
-          } else if (pathname === "/onboarding") {
-            // console.log("redirect to home");
-            redirect("/");
+          if (!response.ok) {
+            router.push("/someother");
           }
 
-          return;
-        }
+          const onboardingStatusRes = response.data;
 
-        const response = await getOnboardingStatus();
-
-        // console.log("response.data", response.data);
-
-        if (!response.ok) {
-          setOnboardingStatus(false);
-          redirect("/sign-in");
-        }
-
-        const onboardingStatusRes = response.data;
-
-        setOnboardingStatus(onboardingStatusRes);
-
-        if (pathname !== "/onboarding") {
-          // console.log("not in onboarding page");
-
-          // console.log("onboardingStatusRes", onboardingStatusRes);
-
-          // Not yet onboarded
-          if (!onboardingStatusRes) redirect("/onboarding");
-        } else {
-          // Already onboarded
-          if (onboardingStatusRes) redirect("/");
+          if (!onboardingStatusRes) router.push("/onboarding");
+        } catch (error) {
+          console.log("error", error);
+          toast({
+            title: "Looks like something is broken.",
+            description: "We're working on fixing this issue.",
+          });
+        } finally {
+          setLoading(false);
         }
       };
 
-      void handleOnboardingRedirection();
-    }, [pathname, mounted, setOnboardingStatus]);
+      void handleFetchOnboardingStatus();
+    }, [router]);
 
     return (
       <>
-        {!mounted || onboardingStatus === undefined ? (
+        {loading ? (
           <div className="grid h-screen place-items-center">
             <div className="flex gap-x-[3px]">
-              <LoaderDot />
+              <Gradient />
+              <LoaderDot dotClassName="bg-black" />
             </div>
           </div>
         ) : (

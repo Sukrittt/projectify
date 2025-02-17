@@ -32,7 +32,7 @@ export const SaveConfig: React.FC<SaveConfigProps> = ({ config }) => {
             )}
           >
             {isPending ? (
-              <LoaderDot className="pt-[7px]" />
+              <LoaderDot className="pt-[7px]" dotClassName="bg-black" />
             ) : (
               <Check className="h-4 w-4" />
             )}

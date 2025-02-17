@@ -185,7 +185,7 @@ export const AuthForm = ({ type }: AuthFormProps) => {
   }, [form.watch("code")]);
 
   return (
-    <div className="w-full max-w-xl space-y-4 rounded-xl border px-8 py-8">
+    <div className="w-full max-w-xl space-y-4 rounded-xl border bg-background px-8 py-8">
       <h3 className="pb-4 text-center text-lg font-medium">
         {type === "sign-in" ? "Sign in to" : "Sign up for"}{" "}
         <span className="text-primary">Projectify.</span>
