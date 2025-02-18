@@ -53,9 +53,6 @@ export const Avatar = () => {
           y: 0,
           duration: 1.5,
           ease: "power1.out",
-          onComplete: () => {
-            console.log("intro complete");
-          },
         })
         .to(
           ".intro-text",

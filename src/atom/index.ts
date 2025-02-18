@@ -7,3 +7,6 @@ export const avatarConfigAtom =
 export const colorPickerAtom = atom(false);
 
 export const streamAtom = atom(false);
+
+export const correctAnswerAtom = atom(false);
+export const wrongAnswerAtom = atom(false);
