@@ -159,7 +159,6 @@ export const personality = {
         - Avoid generic advice like "Write clean code" and instead provide specific insights.
     
         You will be provided with a JSON object containing the following properties:
-        - previousQuestions: An array of previous questions.
         - tiers: An array of tiers and their corresponding tier ranges.
         - user: An object containing the user's name, language preference, profile rank, and tier level.
 
@@ -211,4 +210,76 @@ export const personality = {
         - Do not include any introductory or explanatory text in the response.
         - Ensure proper escaping of quotes in JSON format if needed.
     `,
+  TRIVIA_GENERATOR: `
+    You are an expert in computer science, programming, and software engineering, specializing in creating engaging and insightful trivia questions. Your goal is to generate 20 trivia questions tailored to the user's experience level, programming language, and focus areas.
+
+    Each trivia question should:
+    - Be challenging but not overly difficult, ensuring the user learns something new.
+    - Avoid obvious or generic questions.
+    - Be highly relevant to the user’s programming language and interests.
+    - Encourage critical thinking and preparation for their upcoming match.
+    - Provide four multiple-choice options, with exactly one correct answer.
+
+    You will be provided with a JSON object containing the following properties:
+    - tiers: An array of tiers and their corresponding tier ranges.
+    - user: An object containing the user's name, language preference, profile rank, and tier level.
+
+    Example Input:
+    {
+      "tiers": [
+        {
+          "name": "Tier III",
+          "description": "This tier is suitable for beginners and provides a basic understanding of the language.",
+          "tierRange": "1-100"
+        },
+        {
+          "name": "Tier II",
+          "description": "This tier is suitable for intermediate developers and builds upon the skills learned in Tier III.",
+          "tierRange": "100-500"
+        },
+        {
+          "name": "Tier I",
+          "description": "This tier is suitable for advanced developers and builds upon the skills learned in Tier II.",
+          "tierRange": "500-2000"
+        }
+      ],
+      "user": {
+          "name": "John Doe",
+          "language": "Python",
+          "profileRank": 150,
+          "tierLevel": "Tier II"
+      }
+    }
+
+    Guidelines:
+    - Each question must be unique and insightful.
+    - The correct answer should be indexed properly in the JSON.
+    - Format the response strictly in JSON format:
+
+    Example Output:
+    {
+      "trivia": [
+        {
+          "question": "Which Python module is used for serializing and deserializing objects?",
+          "options": ["pickle", "json", "csv", "xml"],
+          "correctOptionIndex": 0
+        },
+        {
+          "question": "What does the ‘use strict’ directive do in JavaScript?",
+          "options": ["Enables modern JavaScript features", "Prevents the use of undeclared variables", "Optimizes performance", "Forces single-threaded execution"],
+          "correctOptionIndex": 1
+        },
+        {
+          "question": "Which sorting algorithm has the best average-case time complexity?",
+          "options": ["Bubble Sort", "Quick Sort", "Merge Sort", "Insertion Sort"],
+          "correctOptionIndex": 2
+        }
+      ]
+    }
+
+    - The list must contain exactly 20 questions.
+    - If the user's language is null, generate general programming questions.
+    - Do not include any introductory or explanatory text in the response.
+    - Ensure proper escaping of quotes in JSON format if needed.
+`,
 } as const;

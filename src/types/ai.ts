@@ -17,3 +17,11 @@ export type IncorrectSolution = {
 export type TipsPayload = {
   tips: string[];
 };
+
+export type TriviaPayload = {
+  trivia: {
+    question: string;
+    options: string[];
+    correctOptionIndex: number;
+  }[];
+};

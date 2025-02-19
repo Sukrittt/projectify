@@ -3,7 +3,11 @@ import { TRPCError } from "@trpc/server";
 import apiClient from "~/utils/axios";
 import { personality } from "~/constants/ai";
 import { generateContentWithGemini } from "~/lib/gemini";
-import type { CodingMinigamePayload, TipsPayload } from "~/types";
+import type {
+  CodingMinigamePayload,
+  TipsPayload,
+  TriviaPayload,
+} from "~/types";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { CodeEvaluatorValidator, PromptValidator } from "~/types/validator";
 
@@ -78,6 +82,36 @@ export const aiRouter = createTRPCRouter({
       ok: true,
       data: formattedTips,
       message: "Successfully generated tips.",
+    };
+  }),
+  generateTrivia: privateProcedure.query(async ({ ctx }) => {
+    const response = await apiClient.post(`/generate/payload/waiting-room`, {
+      clerkId: ctx.user.id,
+    });
+
+    const payload = {
+      ...response.data,
+    } as Omit<CodingMinigamePayload, "previousQuestions">;
+
+    const data = await generateContentWithGemini(
+      JSON.stringify(payload),
+      personality.TRIVIA_GENERATOR,
+    );
+
+    if (!data) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Failed to generate tips.",
+      });
+    }
+
+    const formattedTrivia = extractAndParseJSON(data)
+      .trivia as TriviaPayload["trivia"];
+
+    return {
+      ok: true,
+      data: formattedTrivia,
+      message: "Successfully generated trivia questions.",
     };
   }),
 });

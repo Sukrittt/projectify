@@ -9,8 +9,8 @@ import {
   type DefaultOptions,
   defaultOptions,
 } from "~/app/(auth)/onboarding/_config";
-import { Intro } from "~/app/intro";
 import { avatarConfigAtom } from "~/atom";
+import { Intro } from "~/app/_components/music/intro";
 import { AvatarCustomizer } from "./avatar-customizer";
 
 export const Avatar = () => {
