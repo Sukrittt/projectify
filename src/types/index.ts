@@ -25,6 +25,8 @@ export type {
   InteractionData,
   InteractionValues,
   CodingMinigamePayload,
+  RoomEvent,
+  ExtendedEventUser,
 } from "./room";
 
 export type {

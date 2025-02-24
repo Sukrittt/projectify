@@ -10,3 +10,5 @@ export const streamAtom = atom(false);
 
 export const correctAnswerAtom = atom(false);
 export const wrongAnswerAtom = atom(false);
+
+export const showCountdownAtom = atom(false);

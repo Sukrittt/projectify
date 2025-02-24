@@ -3,12 +3,20 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useEffect, useRef, useState } from "react";
 
+import type {
+  ExtendedEventUser,
+  InteractionData,
+  RoomData,
+  RoomEvent,
+} from "~/types";
 import { cn } from "~/lib/utils";
+import { pusherClient } from "~/lib/pusher";
+import { PUSHER_CHANNELS } from "~/constants";
 import { TipsAndTricks } from "./tips-tricks";
+import { MatchDetails } from "./match-details";
 import { Button } from "~/components/ui/button";
 import { CodingMiniGame } from "./coding-minigame";
 import { TriviaQuestions } from "./trivia-questions";
-import type { InteractionData, RoomData } from "~/types";
 import { activityOpts } from "~/app/(screen)/room/_constant";
 import { LoaderDot } from "~/app/_components/gsap/loader-dot";
 import { WaitingRoomInteraction } from "./waiting-room-interaction";
@@ -21,6 +29,8 @@ interface RoomContainerProps {
 export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
+
+  const [opponent, setOpponent] = useState<ExtendedEventUser | null>(null);
 
   const [isClosing, setIsClosing] = useState(false);
 
@@ -131,13 +141,84 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
       );
   });
 
+  const handleMatchFinished = contextSafe((user?: ExtendedEventUser) => {
+    console.log("match found", user);
+
+    const activityValues = activityOpts.map(
+      (opt) => `.room-interaction-${opt.value}`,
+    );
+
+    tl.current = gsap
+      .timeline()
+      .to(".room-controls", {
+        opacity: 0,
+        ease: "power4.in",
+      })
+      .to(
+        ".room-interaction-text",
+        {
+          opacity: 0,
+          ease: "power4.in",
+        },
+        "-=0.5",
+      )
+      .to(
+        activityValues,
+        {
+          opacity: 0,
+          ease: "power4.out",
+          stagger: 0.1,
+          reversed: true,
+        },
+        "-=0.5",
+      )
+      .to(".room-activity-container", {
+        y: 0,
+        ease: "power4.out",
+        duration: 0.1,
+      })
+      .fromTo(
+        ".activity-content",
+        {
+          opacity: 0,
+          stagger: 0.1,
+          ease: "power4.out",
+        },
+        {
+          opacity: 1,
+          stagger: 0.1,
+          ease: "power4.out",
+        },
+      );
+  });
+
+  //pusher
+  useEffect(() => {
+    pusherClient.subscribe(`user-${room.data.userId}-room`);
+
+    const matchmakingHandler = (event: RoomEvent) => {
+      if (event.type === "match-found" && event.user) {
+        setOpponent(event.user);
+      }
+
+      handleMatchFinished(event.user);
+    };
+
+    pusherClient.bind(PUSHER_CHANNELS.MATCH_MAKING, matchmakingHandler); //listen to this event
+
+    return () => {
+      pusherClient.unsubscribe(`user-${room.data.userId}-room`);
+      pusherClient.unbind(PUSHER_CHANNELS.MATCH_MAKING, matchmakingHandler);
+    };
+  }, [room.data.userId]);
+
   return (
     <div ref={container}>
       <div
         className={cn(
           "room-activity-container absolute -z-40 h-screen w-full",
           {
-            "z-50": !!activity,
+            "z-50": !!activity || !!opponent,
           },
         )}
       >
@@ -199,6 +280,10 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
             {activity?.value === "coding-minigames" && <CodingMiniGame />}
             {activity?.value === "tips-and-tricks" && <TipsAndTricks />}
             {activity?.value === "trivia" && <TriviaQuestions />}
+
+            {opponent && (
+              <MatchDetails opponent={opponent} roomId={room.data.id} />
+            )}
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ export const UserProfile = () => {
       ) : (
         serverData && (
           <div className="flex justify-end gap-x-2">
-            {/* <div id={"onboarding-avatar"}>
+            {/* <div id={"profile-avatar"}>
             <ReactNiceAvatar
               {...serverData.data.avatarConfig}
               className="h-6 w-6"
@@ -32,8 +32,9 @@ export const UserProfile = () => {
 
             <div className="flex flex-col items-end justify-end gap-x-4">
               <p className="text-sm">
-                {serverData.data.firstName.charAt(0).toUpperCase() +
-                  serverData.data.firstName.slice(1).toLowerCase()}
+                {/* {serverData.data.firstName.charAt(0).toUpperCase() +
+                  serverData.data.firstName.slice(1).toLowerCase()} */}
+                {serverData.data.firstName + " " + serverData.data.lastName}
                 &rsquo;s workspace{" "}
               </p>
 

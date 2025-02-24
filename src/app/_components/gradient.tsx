@@ -3,11 +3,12 @@ import { useAtom } from "jotai";
 import { useGSAP } from "@gsap/react";
 import { useEffect, useRef } from "react";
 
-import { correctAnswerAtom, wrongAnswerAtom } from "~/atom";
+import { correctAnswerAtom, showCountdownAtom, wrongAnswerAtom } from "~/atom";
 
 export const Gradient = () => {
   const [wrongAnswer, setWrongAnswer] = useAtom(wrongAnswerAtom);
   const [correctAnswer, setCorrectAnswer] = useAtom(correctAnswerAtom);
+  const [showCountdown] = useAtom(showCountdownAtom);
 
   const container = useRef<HTMLDivElement | null>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
@@ -121,10 +122,75 @@ export const Gradient = () => {
       animateColor(".gradient-three", "rgb(253, 230, 138)");
 
       setWrongAnswer(false);
-    }, 2000);
+    }, 2_000);
 
     return () => clearTimeout(timer);
   }, [wrongAnswer]);
+
+  useEffect(() => {
+    if (!showCountdown) return;
+
+    const interval = setInterval(() => {
+      gsap.to(".gradient-one", {
+        scale: 3,
+        x: "+=5",
+        y: "+=5",
+        duration: 5,
+        ease: "power1.inOut",
+        yoyo: true,
+        onComplete: () => {
+          gsap.to(".gradient-one", {
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 5,
+            ease: "power1.inOut",
+            yoyo: true,
+          });
+        },
+      });
+
+      gsap.to(".gradient-two", {
+        scale: 3,
+        x: "-=5",
+        y: "-=5",
+        duration: 5,
+        ease: "power1.inOut",
+        yoyo: true,
+        onComplete: () => {
+          gsap.to(".gradient-two", {
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 5,
+            ease: "power1.inOut",
+            yoyo: true,
+          });
+        },
+      });
+
+      gsap.to(".gradient-three", {
+        scale: 3,
+        x: "+=5",
+        y: "-=5",
+        duration: 5,
+        ease: "power1.inOut",
+        yoyo: true,
+        onComplete: () => {
+          gsap.to(".gradient-three", {
+            scale: 1,
+            x: 0,
+            y: 0,
+            duration: 5,
+            ease: "power1.inOut",
+            yoyo: true,
+          });
+        },
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [showCountdown]);
 
   return (
     <div ref={container}>

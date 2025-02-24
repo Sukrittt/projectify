@@ -14,6 +14,7 @@ export const env = createEnv({
     MICROSERVICE_PRODUCTION_URL: z.string().url(),
     MICROSERVICE_DEVELOPMENT_URL: z.string().url(),
     MICROSERVICE_TOKEN: z.string(),
+    GEMINI_API_KEY: z.string(),
   },
 
   /**
@@ -23,6 +24,8 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_PUSHER_APP_KEY: z.string(),
+    NEXT_PUBLIC_PUSHER_APP_CLUSTER: z.string(),
   },
 
   /**
@@ -31,12 +34,16 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     MICROSERVICE_PRODUCTION_URL: process.env.MICROSERVICE_PRODUCTION_URL,
     MICROSERVICE_DEVELOPMENT_URL: process.env.MICROSERVICE_DEVELOPMENT_URL,
     MICROSERVICE_TOKEN: process.env.MICROSERVICE_TOKEN,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
+    NEXT_PUBLIC_PUSHER_APP_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -12,7 +12,7 @@ const env = envSchema.parse(process.env);
 
 const apiClient = axios.create({
   baseURL: env.MICROSERVICE_PRODUCTION_URL,
-  timeout: 10000,
+  timeout: 30_000,
   headers: {
     "Content-Type": "application/json",
   },

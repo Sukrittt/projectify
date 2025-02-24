@@ -86,6 +86,8 @@ const seshData = t.middleware(async ({ next }) => {
     });
   }
 
+  console.log("userId", user.id, user.firstName);
+
   return next({
     ctx: {
       user,

@@ -6,7 +6,7 @@ import { handleAxiosError } from "~/lib/utils";
 import type { ServerActionResponse, RoomData } from "~/types";
 
 export const getRoom = async (): Promise<
-  ServerActionResponse<{ id: string; createdAt: Date }>
+  ServerActionResponse<{ id: string; createdAt: Date; userId: string }>
 > => {
   try {
     const user = await currentUser();
