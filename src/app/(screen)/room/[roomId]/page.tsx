@@ -1,11 +1,7 @@
-interface RoomCompetitionProps {
-  params: {
-    roomId: string;
-  };
-}
+type Params = Promise<{ roomId: string }>;
 
-export default function RoomCompetition({ params }: RoomCompetitionProps) {
-  const { roomId } = params;
+export default async function RoomCompetition({ params }: { params: Params }) {
+  const { roomId } = await params;
 
   return <div>Room - {roomId}</div>;
 }
