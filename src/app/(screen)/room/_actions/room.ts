@@ -20,6 +20,8 @@ export const getRoom = async (): Promise<
 
     const response = await apiClient.get(`/room/${user.id}`);
 
+    console.log("response", response.data);
+
     const { data, message } = response.data as RoomData;
 
     return {
