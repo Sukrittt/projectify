@@ -69,7 +69,7 @@ export const MatchDetails: React.FC<MatchDetailsProps> = ({
 
     const timer = setInterval(() => {
       if (currentCount === 0) {
-        router.push(`/room/${roomId}`);
+        router.push(`/c/${opponent.competitionId}`);
         return;
       }
 

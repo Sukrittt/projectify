@@ -7,8 +7,6 @@ import { RoomContainer } from "./_components/room-container";
 export default async function Room() {
   const serverData = await getRoom();
 
-  console.log("serverData", serverData);
-
   const { data: room } = serverData;
 
   if (!room) notFound();

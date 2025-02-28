@@ -39,9 +39,13 @@ type PreviousQuestion = {
   questionType: string;
 };
 
-export type ExtendedEventUser = UserPayload & { avatar: string };
+export type ExtendedEventUser = UserPayload & {
+  avatar: string;
+  competitionId: string;
+};
 
 export type RoomEvent = {
   type: "match-found" | "match-not-found";
   user?: ExtendedEventUser;
+  competitionId: string;
 };

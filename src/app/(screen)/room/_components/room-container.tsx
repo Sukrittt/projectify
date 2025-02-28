@@ -198,7 +198,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
 
     const matchmakingHandler = (event: RoomEvent) => {
       if (event.type === "match-found" && event.user) {
-        setOpponent(event.user);
+        setOpponent({ ...event.user, competitionId: event.competitionId });
       }
 
       handleMatchFinished(event.user);
