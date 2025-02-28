@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 
+import { api } from "~/trpc/server";
 import { type RoomData } from "~/types";
-import { getRoom } from "./_actions/room";
 import { RoomContainer } from "./_components/room-container";
 
 export default async function Room() {
-  const serverData = await getRoom();
+  const serverData = await api.room.getRoom();
 
   const { data: room } = serverData;
 

@@ -1,4 +1,5 @@
 import apiClient from "~/utils/axios";
+import { type RoomData } from "~/types";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 type RoomPayload = {
@@ -12,6 +13,19 @@ type QueuTimePayload = {
 };
 
 export const roomRouter = createTRPCRouter({
+  getRoom: privateProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+
+    const response = await apiClient.get(`/room/${userId}`);
+
+    const { data, message } = response.data as RoomData;
+
+    return {
+      ok: true,
+      data,
+      message,
+    };
+  }),
   joinRoom: privateProcedure.mutation(async ({ ctx }) => {
     const response = await apiClient.post(`/room/join`, {
       clerkId: ctx.user.id,
