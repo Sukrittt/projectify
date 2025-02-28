@@ -11,6 +11,8 @@ export const getRoom = async (): Promise<
   try {
     const user = await currentUser();
 
+    console.log("getRoom user.id", user?.id);
+
     if (!user) {
       return {
         ok: false,
