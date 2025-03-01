@@ -281,5 +281,6 @@ export const personality = {
     - If the user's language is null, generate general programming questions.
     - Do not include any introductory or explanatory text in the response.
     - Ensure proper escaping of quotes in JSON format if needed.
+
 `,
 } as const;

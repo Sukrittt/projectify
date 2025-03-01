@@ -12,8 +12,6 @@ export const useJoinRoom = () => {
       toast("Moving you to waiting room.", {
         description: "Enjoy our waiting room activities.",
       });
-
-      // Start listening to pusher event
     },
   });
 };

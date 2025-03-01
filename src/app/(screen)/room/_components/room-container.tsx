@@ -142,7 +142,7 @@ export const RoomContainer: React.FC<RoomContainerProps> = ({ room }) => {
   });
 
   const handleMatchFinished = contextSafe((user?: ExtendedEventUser) => {
-    console.log("match found", user);
+    console.log("Match Found", user);
 
     const activityValues = activityOpts.map(
       (opt) => `.room-interaction-${opt.value}`,
